@@ -14,8 +14,8 @@ export const SignIn = z.object({
 export const ProductType = z.object({
     name: z.string(),
     description: z.string(),
-    quantity: z.number(),
-    price: z.number(),
+    quantity: z.string(),
+    price: z.string(),
     isActive: z.string(),
     category: z.string()
 })

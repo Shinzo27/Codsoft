@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { string } from 'zod';
 
 const productSchema = new Schema({
     name:{
@@ -24,7 +25,7 @@ const productSchema = new Schema({
         required:true,
     },
     isActive: {
-        type: Boolean,
+        type: String,
         required: true,
         enum: ["True","False"]
     },

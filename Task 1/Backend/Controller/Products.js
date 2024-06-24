@@ -14,10 +14,11 @@ export const addProduct = async(req,res) => {
     const { img } = req.files
     const parsedPayload = ProductType.safeParse(bodyParser)
     const allowedFormats = ["image/png", "image/jpeg", "image/webp", "image/jpg"]
-    
+
     if(!parsedPayload.success) return res.status(400).json({
         success: false,
-        message: "Fill all details properly!"
+        message: "Fill all details properly!",
+        error: parsedPayload.error
     })
 
     if(!allowedFormats.includes(img.mimetype)) return res.status(400).json({
@@ -25,9 +26,7 @@ export const addProduct = async(req,res) => {
         message: "File format not supported!"
     })
 
-    const isExists = await Product.find({
-        name: parsedPayload.data.name
-    })
+    const isExists = await Product.findOne({ name: parsedPayload.data.name })
 
     if(isExists) return res.status(400).json({
         success: false,
