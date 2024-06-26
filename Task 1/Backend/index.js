@@ -3,9 +3,13 @@ import mongoose from 'mongoose'
 import { config } from 'dotenv'
 import userRouter from './Routes/Users.js'
 import productRouter from './Routes/Products.js'
+import cartRouter from './Routes/Cart.js'
 import cookieParser from 'cookie-parser'
 import cloudinary from 'cloudinary'
 import fileUpload from 'express-fileupload'
+import { errorMiddleware } from './Middleware/ErrorHandler.js'
+import { checkForAuthentication } from './Utils/Auth.js'
+import cors from 'cors'
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -19,9 +23,16 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
+app.use(cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ["GET","POST","PUT","DELETE"],
+    credentials: true
+}))
+
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
+app.use(checkForAuthentication('CustomerToken'))
 
 app.use(
     fileUpload({
@@ -32,10 +43,13 @@ app.use(
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/product', productRouter)
+app.use('/api/v1/cart', cartRouter)
 
 app.get('/', (req,res)=>{
     res.send("Hello World")
 })
+
+app.use(errorMiddleware)
 
 app.listen(PORT, ()=>{
     console.log("Server Started at Port: " + PORT);
