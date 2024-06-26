@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 export const generateToken = (user, message, stautsCode, res) => {
     const token = user.generateWebToken();
     const cookieName = user.role === "Admin" ? "AdminToken" : "CustomerToken"; 
