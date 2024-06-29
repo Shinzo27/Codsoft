@@ -15,7 +15,7 @@ const app = express()
 const PORT = process.env.PORT || 8000
 config({path: './config/.env'})
 
-mongoose.connect(process.env.MONGO_URI).then(console.log("MongoDB Connected"))
+mongoose.connect(process.env.MONGO_URI, console.log("MongoDB Connected"))
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
