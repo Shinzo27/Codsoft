@@ -24,11 +24,6 @@ const productSchema = new Schema({
         type:Number,
         required:true,
     },
-    isActive: {
-        type: String,
-        required: true,
-        enum: ["True","False"]
-    },
     category: {
         type: String,
         required: true

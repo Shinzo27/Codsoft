@@ -4,6 +4,7 @@ import { config } from 'dotenv'
 import userRouter from './Routes/Users.js'
 import productRouter from './Routes/Products.js'
 import cartRouter from './Routes/Cart.js'
+import paymentRouter from './Routes/Payment.js'
 import cookieParser from 'cookie-parser'
 import cloudinary from 'cloudinary'
 import fileUpload from 'express-fileupload'
@@ -44,6 +45,7 @@ app.use(
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/product', productRouter)
 app.use('/api/v1/cart', cartRouter)
+app.use('/api/v1/payment', paymentRouter)
 
 app.get('/', (req,res)=>{
     res.send("Hello World")
