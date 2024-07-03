@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import ProductCard from '../Components/ProductCard'
 import driedFruit1 from '../assets/driedfruit1.jpg'
 import driedFruit2 from '../assets/driedfruit2.jpg'
@@ -46,6 +47,18 @@ const productArray = [
 ]
 
 const Product = () => {
+  const [product, setProduct] = useState([])
+  const [filter, setFilter] = useState("")
+
+  async function getProduts(){
+      const { data } = await axios.get('http://localhost:8000/api/v1/product/filterProduct?filter', {withCredentials: true})
+      setProduct(data.product)
+      // console.log(product)
+  }
+  useEffect(()=>{
+    getProduts()
+  }, [filter])
+
   return (
     <>
       <Navbar/>
@@ -55,8 +68,8 @@ const Product = () => {
         </div>
         <div className=' p-5 flex justify-center items-center gap-5 flex-wrap'>
           {
-            productArray.map((product)=>(
-              <div>
+            productArray.map((product, index)=>(
+              <div key={index}>
                 <ProductCard img={product.img} ProductName={product.name} ProductPrice={product.price}/>
               </div>
             ))
@@ -69,8 +82,8 @@ const Product = () => {
         </div>
         <div className=' p-5 flex justify-center items-center gap-5 flex-wrap'>
           {
-            productArray.map((product)=>(
-              <div>
+            productArray.map((product, index)=>(
+              <div key={index}>
                 <ProductCard img={product.img} ProductName={product.name} ProductPrice={product.price}/>
               </div>
             ))
@@ -83,8 +96,8 @@ const Product = () => {
         </div>
         <div className=' p-5 flex justify-center items-center gap-5 flex-wrap'>
           {
-            productArray.map((product)=>(
-              <div>
+            productArray.map((product, index)=>(
+              <div key={index}>
                 <ProductCard img={product.img} ProductName={product.name} ProductPrice={product.price}/>
               </div>
             ))
@@ -97,8 +110,8 @@ const Product = () => {
         </div>
         <div className=' p-5 flex justify-center items-center gap-5 flex-wrap'>
           {
-            productArray.map((product)=>(
-              <div>
+            productArray.map((product, index)=>(
+              <div key={index}>
                 <ProductCard img={product.img} ProductName={product.name} ProductPrice={product.price}/>
               </div>
             ))
