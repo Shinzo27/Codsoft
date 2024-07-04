@@ -51,7 +51,7 @@ const Product = () => {
   const [filter, setFilter] = useState("")
 
   async function getProduts(){
-      const { data } = await axios.get('http://localhost:8000/api/v1/product/filterProduct?filter', {withCredentials: true})
+      const { data } = await axios.get(`http://localhost:8000/api/v1/product/filterProduct?${filter}`, {withCredentials: true})
       setProduct(data.product)
       console.log(data.product)
   }
