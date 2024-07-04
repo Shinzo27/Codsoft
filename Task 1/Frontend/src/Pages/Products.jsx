@@ -53,7 +53,7 @@ const Product = () => {
   async function getProduts(){
       const { data } = await axios.get('http://localhost:8000/api/v1/product/filterProduct?filter', {withCredentials: true})
       setProduct(data.product)
-      // console.log(product)
+      console.log(data.product)
   }
   useEffect(()=>{
     getProduts()
@@ -68,9 +68,9 @@ const Product = () => {
         </div>
         <div className=' p-5 flex justify-center items-center gap-5 flex-wrap'>
           {
-            productArray.map((product, index)=>(
+            product.map((product, index)=>(
               <div key={index}>
-                <ProductCard img={product.img} ProductName={product.name} ProductPrice={product.price}/>
+                <ProductCard img={product.imgUrl} ProductName={product.username} ProductPrice={product.price}/>
               </div>
             ))
           }
