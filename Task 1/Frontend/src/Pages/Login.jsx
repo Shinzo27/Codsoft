@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+  const [ username, setUsername ] = useState("Shinzo27")
+  const [ password, setPassword ] = useState("Pratham27")
+
+  async function loginHandler(){
+    const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {username, password},{ withCredentials: true })
+    console.log(data)
+  }
   return (
     <>
       <Header />
@@ -67,6 +75,7 @@ const Login = () => {
               <button
                 type="button"
                 className="w-full py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                onClick={loginHandler}
               >
                 Sign in
               </button>

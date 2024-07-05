@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios'
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import driedFruit2 from "../assets/driedfruit2.jpg";
@@ -7,6 +8,22 @@ import CartItem from "../Components/CartItem";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState();
+  async function getCartItems(){
+    const { data } = await axios.get('http://localhost:8000/api/v1/cart/display', {withCredentials: true})
+    console.log(data)
+    setCartItems(data.cartItems)
+  }
+  async function increaseQuantity(id){
+    const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
+    console.log(data);
+  }
+  async function decreaseQuantity(id){
+    const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
+    console.log(data);
+  }
+  useEffect(()=>{
+    getCartItems()
+  }, [])
   return (
     <>
       <Header/>
@@ -15,8 +32,7 @@ const Cart = () => {
           </h2>
       { cartItems ? 
       <section className=" py-6 relative">
-        <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
-          
+        <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto"> 
           <div className="hidden lg:grid grid-cols-2 py-6">
             <div className="font-normal text-xl leading-8 text-gray-500">
               Product
