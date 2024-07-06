@@ -61,7 +61,6 @@ const Product = () => {
 
   return (
     <>
-      <Navbar/>
       <div className='container pt-5'>
         <div className=' w-full h-16 bg-blue-500 flex items-center justify-center text-white rounded-xl'>
           <h1 className='text-3xl'>Category Name</h1>
@@ -117,8 +116,7 @@ const Product = () => {
             ))
           }
         </div>
-      </div>
-      <Footer/>
+      </div>  
     </>
   )
 }

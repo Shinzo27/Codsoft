@@ -3,18 +3,24 @@ import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  const [ username, setUsername ] = useState("Shinzo27")
-  const [ password, setPassword ] = useState("Pratham27")
+  const [ username, setUsername ] = useState("")
+  const [ password, setPassword ] = useState("")
 
-  async function loginHandler(){
-    const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {username, password},{ withCredentials: true })
-    console.log(data)
+  async function loginHandler(e){
+    e.preventDefault()
+    try {
+      const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {username, password},{ withCredentials: true })
+      console.log(data)
+      toast.success(data.message)
+    } catch (error) {
+        toast.error(error.data.message)
+    }
   }
   return (
     <>
-      <Header />
       <div className="container flex justify-center items-center font-[sans-serif] text-[#333] pt-10">
         <div className="grid justify-center max-w-md mx-auto ">
           <div>
@@ -24,18 +30,19 @@ const Login = () => {
               alt="login-image"
             />
           </div>
-          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]">
+          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]" method="POST" onSubmit={loginHandler}>
             <div className="mb-10">
               <h3 className="text-3xl font-extrabold text-blue-600">Sign in</h3>
             </div>
             <div>
               <div className="relative flex items-center">
                 <input
-                  name="email"
+                  name="username"
                   type="text"
-                  required
                   className="w-full text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
-                  placeholder="Enter email"
+                  placeholder="Enter username"
+                  value={username}
+                  onChange={(e)=>setUsername(e.target.value)}
                 />
               </div>
             </div>
@@ -44,9 +51,10 @@ const Login = () => {
                 <input
                   name="password"
                   type="password"
-                  required
                   className="w-full text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
                   placeholder="Enter password"
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -72,13 +80,11 @@ const Login = () => {
               </div>
             </div>
             <div className="mt-10">
-              <button
-                type="button"
+              <input
+                type="submit"
                 className="w-full py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                onClick={loginHandler}
-              >
-                Sign in
-              </button>
+                value={"Sign in"}
+              />
               <p className="text-sm text-center mt-6">
                 Don't have an account{" "}
                 <Link
@@ -92,7 +98,6 @@ const Login = () => {
           </form>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

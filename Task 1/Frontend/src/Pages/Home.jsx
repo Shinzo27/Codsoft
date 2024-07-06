@@ -9,12 +9,10 @@ import Reviews from '../Components/Reviews'
 const Home = () => {
   return (
     <>
-        <Header/>
         <Hero/>
         <About/>
         <Expertise/>
         <Reviews/>
-        <Footer/>
     </>
 
   )

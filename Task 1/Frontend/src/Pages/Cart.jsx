@@ -5,13 +5,17 @@ import Footer from "../Components/Footer";
 import driedFruit2 from "../assets/driedfruit2.jpg";
 import driedFruit1 from "../assets/driedfruit1.jpg";
 import CartItem from "../Components/CartItem";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState();
   async function getCartItems(){
     const { data } = await axios.get('http://localhost:8000/api/v1/cart/display', {withCredentials: true})
     console.log(data)
-    setCartItems(data.cartItems)
+    if(data){
+      setCartItems(data.cartItems)
+      toast.success("Items Loadded")
+    }
   }
   async function increaseQuantity(id){
     const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
@@ -26,7 +30,6 @@ const Cart = () => {
   }, [])
   return (
     <>
-      <Header/>
       <h2 className="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black pt-6">
             Shopping Cart
           </h2>
@@ -113,7 +116,6 @@ const Cart = () => {
               No Items Found In Cart
             </h2>
           </div>}
-      <Footer />
     </>
   );
 };
