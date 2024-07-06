@@ -1,32 +1,24 @@
 import { SignIn, SignUp } from '../config/type.js'
 import User from '../Models/Users.js'
 import { generateToken } from '../Utils/Auth.js'
+import { ErrorHandler } from '../Middleware/ErrorHandler.js'
 
-export const userSignin = async(req,res) => {
+export const userSignin = async(req,res,next) => {
     const BodyParser = req.body
     console.log(BodyParser);
     const parsedPayload = SignIn.safeParse(BodyParser)
 
     if(!parsedPayload.success) {
-        return res.status(400).json({
-            success: false,
-            message: "Fill all the details properly",
-        })
+        return next(new ErrorHandler("Fill details properly!", 400))
     }
 
     const isExists = await User.findOne({ username: parsedPayload.data.username, role: 'Customer'})
 
-    if(!isExists) return res.status(400).json({
-        success: false,
-        message: "Username Not Found"
-    })
+    if(!isExists) return next(new ErrorHandler("User doesn't exists!", 400))
 
     const isMatchedPassword = await isExists.comparePassword(parsedPayload.data.password)
 
-    if(!isMatchedPassword) return res.status(400).json({
-        success: false,
-        message: "Invalid Password"
-    })
+    if(!isMatchedPassword) return next(new ErrorHandler("Password didn't matched!", 400))
 
     generateToken(isExists, "Login Successfull", 201, res)
 }

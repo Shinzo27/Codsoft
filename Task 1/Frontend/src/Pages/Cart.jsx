@@ -14,7 +14,6 @@ const Cart = () => {
     console.log(data)
     if(data){
       setCartItems(data.cartItems)
-      toast.success("Items Loadded")
     }
   }
   async function increaseQuantity(id){
@@ -25,9 +24,11 @@ const Cart = () => {
     const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
     console.log(data);
   }
+
   useEffect(()=>{
     getCartItems()
   }, [])
+
   return (
     <>
       <h2 className="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black pt-6">
@@ -120,4 +121,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Cart

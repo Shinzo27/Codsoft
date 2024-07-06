@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login = () => {
   const [ username, setUsername ] = useState("")
   const [ password, setPassword ] = useState("")
+  const navigateTo = useNavigate()
 
   async function loginHandler(e){
     e.preventDefault()
@@ -15,8 +16,10 @@ const Login = () => {
       const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {username, password},{ withCredentials: true })
       console.log(data)
       toast.success(data.message)
+      navigateTo('/')
     } catch (error) {
-        toast.error(error.data.message)
+        // toast.error(error)
+        console.log(error.message);
     }
   }
   return (
