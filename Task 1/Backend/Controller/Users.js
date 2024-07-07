@@ -23,28 +23,21 @@ export const userSignin = async(req,res,next) => {
     generateToken(isExists, "Login Successfull", 201, res)
 }
 
-export const userSignUp = async(req,res) => {
+export const userSignUp = async(req,res,next) => {
     const BodyParser = req.body
-    const parsedPayload = SignUp.safeParse(BodyParser)
 
-    if(!parsedPayload.success) return res.status(400).json({
-        success: false,
-        message: "Fill all the details properly!"
-    })
+    if(BodyParser.username === "" || BodyParser.email === "" || BodyParser.password === "") return next(new ErrorHandler("Fill all the details properly!", 400))
+
+    const parsedPayload = SignUp.safeParse(BodyParser)
+    if(!parsedPayload.success) return next(new ErrorHandler("Fill all the details properly", 400))
 
     const isUsernameExists = await User.findOne({username: parsedPayload.data.username})
 
-    if(isUsernameExists) return res.status(400).json({
-        success: false,
-        message: "Username Already Taken!"
-    })
+    if(isUsernameExists) return next(new ErrorHandler("Username is already taken!", 400))
     
     const isEmailExists = await User.findOne({email: parsedPayload.data.email})
 
-    if(isEmailExists) return res.status(400).json({
-        success: false,
-        message: "Email Already Taken!"
-    })
+    if(isEmailExists) return next(new ErrorHandler("Email is already taken!", 400))
 
     const user = await User.create({
         username: parsedPayload.data.username,
@@ -58,9 +51,6 @@ export const userSignUp = async(req,res) => {
         message: "User Registered Successfully!"
     })
     else { 
-        return res.status(400).json({
-            success: false,
-            message: "Something Went Wrong!"
-        })
+        return next(new ErrorHandler("Something went wrong!", 400))
     }
 }

@@ -3,18 +3,29 @@ import Navbar from '../Components/Header'
 import Footer from '../Components/Footer'
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
     const [username, setUsername]= useState("")
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
     const navigateTo = useNavigate()
-    async function registerHandler(){
-        const { data } = await axios.post('http://localhost:8000/api/v1/user/signup',{username, email, password},{withCredentials: true})
-        if(data){
-            console.log(data)
-            navigateTo('/')
-        }
+    const handleRegister = async(e) => {
+      e.preventDefault();
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/v1/user/signup",
+          { username, email, password },
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        toast.success(response.data.message)
+        navigateTo("/")
+      } catch (error) {
+        toast.error(error.response.data.message)
+      }
     }
   return (
     <>
@@ -27,7 +38,7 @@ const Signup = () => {
               alt="login-image"
             />
           </div>
-          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]">
+          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]" onSubmit={handleRegister}>
             <div className="mb-10">
               <h3 className="text-3xl font-extrabold text-blue-600">Sign Up</h3>
             </div>
@@ -36,7 +47,6 @@ const Signup = () => {
                 <input
                   name="email"
                   type="text"
-                  required
                   className="w-full text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
                   placeholder="Enter username"
                   value={username}
@@ -49,7 +59,6 @@ const Signup = () => {
                 <input
                   name="email"
                   type="text"
-                  required
                   className="w-full text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
                   placeholder="Enter email"
                   value={email}
@@ -62,7 +71,6 @@ const Signup = () => {
                 <input
                   name="password"
                   type="password"
-                  required
                   className="w-full text-sm border-b border-gray-300 focus:border-blue-600 px-2 py-3 outline-none"
                   placeholder="Enter password"
                   value={password}
@@ -71,13 +79,11 @@ const Signup = () => {
               </div>
             </div>
             <div className="mt-10">
-              <button
-                type="button"
+              <input
+                type="submit"
                 className="w-full py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                onClick={registerHandler}
-              >
-                Sign in
-              </button>
+                value={"Sign up"}
+              />
               <p className="text-sm text-center mt-6">
                 Already logged in?{" "}
                 <Link

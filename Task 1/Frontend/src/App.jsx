@@ -10,8 +10,12 @@ import Header from './Components/Header'
 import Footer from './Components/Footer'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useContext } from 'react'
+import { Context } from './main'
 
 function App() {
+  const { isAuthenticated, setIsAuthenticated, setUser} = useContext(Context)
+  
   return (
     <BrowserRouter>
       <Header/>

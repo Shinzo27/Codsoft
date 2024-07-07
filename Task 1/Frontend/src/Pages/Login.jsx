@@ -10,18 +10,24 @@ const Login = () => {
   const [ password, setPassword ] = useState("")
   const navigateTo = useNavigate()
 
-  async function loginHandler(e){
-    e.preventDefault()
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {username, password},{ withCredentials: true })
-      console.log(data)
-      toast.success(data.message)
-      navigateTo('/')
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/user/signin",
+        { username, password },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      navigateTo("/")
+      toast.success(response.data.message)
     } catch (error) {
-        // toast.error(error)
-        console.log(error.message);
+      toast.error(error.response.data.message)
     }
-  }
+  };
+
   return (
     <>
       <div className="container flex justify-center items-center font-[sans-serif] text-[#333] pt-10">
@@ -33,7 +39,7 @@ const Login = () => {
               alt="login-image"
             />
           </div>
-          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]" method="POST" onSubmit={loginHandler}>
+          <form className="bg-white rounded-2xl p-6 -mt-24 relative z-10 shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)]" method="POST" onSubmit={handleLogin}>
             <div className="mb-10">
               <h3 className="text-3xl font-extrabold text-blue-600">Sign in</h3>
             </div>
