@@ -1,3 +1,4 @@
+import Category from "../Models/Category.js";
 import Product from "../Models/Products.js";
 import { ProductType } from "../config/type.js";
 import cloudinary from "cloudinary";
@@ -36,7 +37,9 @@ export const addProduct = async (req, res) => {
       success: false,
       message: "Something went wrong!",
     });
-  const prodName =  (parsedPayload.data.name).toLowerCase()
+  const getCategory = await Category.find({ name: parsedPayload.data.category })
+
+  const prodName = parsedPayload.data.name.toLowerCase();
   const product = await Product.create({
     name: prodName,
     imgUrl: cloudinaryResponse.secure_url,
@@ -44,7 +47,7 @@ export const addProduct = async (req, res) => {
     quantity: parsedPayload.data.quantity,
     price: parsedPayload.data.price,
     isActive: parsedPayload.data.isActive,
-    category: parsedPayload.data.category,
+    category: getCategory._id
   });
 
   if (product)
@@ -76,4 +79,30 @@ export const getProduct = async (req, res) => {
       category: user.category,
     })),
   });
+};
+
+export const categoryProduct = async (req, res) => {
+  const productsByCategory = await Product.aggregate([
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryDetails",
+      },
+    },
+    {
+      $unwind: "$categoryDetails",
+    },
+    {
+      $group: {
+        _id: "$category",
+        categoryName: { $first: "$categoryDetails.name" },
+        products: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.json({
+    productsByCategory
+  })
 };

@@ -10,6 +10,7 @@ import cloudinary from 'cloudinary'
 import fileUpload from 'express-fileupload'
 import { errorMiddleware } from './Middleware/ErrorHandler.js'
 import { checkForAuthentication } from './Utils/Auth.js'
+import categoryRouter from './Routes/Category.js'
 import cors from 'cors'
 
 const app = express()
@@ -46,6 +47,7 @@ app.use('/api/v1/user', userRouter)
 app.use('/api/v1/product', productRouter)
 app.use('/api/v1/cart', cartRouter)
 app.use('/api/v1/payment', paymentRouter)
+app.use('/api/v1/category', categoryRouter)
 
 app.get('/', (req,res)=>{
     res.send("Hello World")
