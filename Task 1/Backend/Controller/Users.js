@@ -54,3 +54,15 @@ export const userSignUp = async(req,res,next) => {
         return next(new ErrorHandler("Something went wrong!", 400))
     }
 }
+
+export const getUserDetails = async(req,res,next)=>{
+    const user = req.user
+    res.status(200).json({
+        success: true,
+        user
+    })
+}
+
+export const logout = async(req,res)=>{
+    
+}

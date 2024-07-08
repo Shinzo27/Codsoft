@@ -1,34 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoCart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { HiMenu } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
-const MenuLinks = [
-  {
-    id: 1,
-    name: "Home",
-    link: "/",
-  },
-  {
-    id: 2,
-    name: "Shop",
-    link: "/products",
-  },
-  {
-    id: 3,
-    name: "About",
-    link: "/about",
-  },
-  {
-    id: 4,
-    name: "Login",
-    link: "/login",
-  },
-];
+import { Context } from "../main";
+import { LuLogOut } from "react-icons/lu";
 
 const Header = () => {
   const [toggleButton, setToggleButton] = useState(false);
+  const { isAuthenticated, setAuthenticated, user } = useContext(Context)
+  const MenuLinks = [
+    {
+      id: 1,
+      name: "Home",
+      link: "/",
+    },
+    {
+      id: 2,
+      name: "Shop",
+      link: "/products",
+    },
+    {
+      id: 3,
+      name: "About",
+      link: "/about",
+    },
+    isAuthenticated ? {
+      id: 4,
+      name: user.username,
+      link: "/profile"
+    } : {
+      id: 4,
+      name: "Login",
+      link: "/login"
+    }
+  ];
+  const logoutHandler = async()=>{
+    
+  }
 
   return (
     <div
@@ -38,7 +48,7 @@ const Header = () => {
       <div className="py-4 ">
         <div className="container flex justify-between items-center border-b border-gray-300">
           <div className="flex items-center gap-10 text-xl">
-            <a href="#" className="">
+            <a to="#" className="">
               <img className="p-2 w-44" src=".\logo.png" alt="" />
             </a>
             <div className="hidden lg:block">
@@ -59,8 +69,8 @@ const Header = () => {
               <Link to="/cart">
                 <IoCart className="hover:text-orange-500" />
               </Link>
-              <Link to="/profile">
-                <CgProfile className="hover:text-orange-500" />
+              <Link to="/logout">
+                <LuLogOut />
               </Link>
               <div>
                 <button>
@@ -87,30 +97,39 @@ const Header = () => {
         }`}
       >
         <div className="lg:flex-grow text-l">
-          <Link
-            href="/"
+        <Link
+            to="/"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 hover:text-orange-500"
           >
             Home
           </Link>
           <Link
-            href="/products"
+            to="/products"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 hover:text-orange-500"
           >
             Shop
           </Link>
           <Link
-            href="/about"
+            to="/about"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 hover:text-orange-500"
           >
             About
           </Link>
-          <Link
-            href="/login"
+          {
+            isAuthenticated ? <Link
+            to="/profile"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
           >
-            Login
-          </Link>
+            {user.username}
+          </Link> :
+          <Link
+          to="/login"
+          className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
+        >
+          Login
+        </Link>
+          }
+          
         </div>
       </div>
     </div>

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Context } from "../main";
 
 const Login = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context)
+
   const [ username, setUsername ] = useState("")
   const [ password, setPassword ] = useState("")
   const navigateTo = useNavigate()
@@ -21,12 +24,16 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
+      setIsAuthenticated(true)
       navigateTo("/")
       toast.success(response.data.message)
+
     } catch (error) {
       toast.error(error.response.data.message)
     }
   };
+
+  if(isAuthenticated) return <Navigate to={'/'}/>
 
   return (
     <>
