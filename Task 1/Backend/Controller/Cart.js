@@ -2,7 +2,7 @@ import Cart from '../Models/Cart.js'
 import ErrorHandler from "../Middleware/ErrorHandler.js";
 import Product from '../Models/Products.js'
 
-export const displayItems = async (req, res) => {
+export const displayItems = async (req, res, next) => {
   const userId = req.user._id;
   
   const cartItems = await Cart.find({ userId }).populate(
@@ -15,25 +15,17 @@ export const displayItems = async (req, res) => {
   });
 };
 
-export const addToCart = async (req,res) => { 
+export const addToCart = async (req,res, next) => { 
   const productId = req.params.id;
     const userId = req.user._id;
     const { quantity } = req.body;
-    if(!userId) return res.status(400).json({
-      success: false,
-      message: "User is not authenticated!"
-    })
+    if(!userId) return next(new ErrorHandler("User is not authenticated!", 400))
 
-    if(!quantity) return res.status(400).json({
-      success: false,
-      message: "Enter quantity properly!"
-    })
+    if(!quantity) return next(new ErrorHandler("Enter quantity properly!", 400))
     
     const checkIfExist = await Cart.findOne({productId})
-    if(checkIfExist) return res.status(400).json({
-      success: false,
-      message: "Product is already added in to the cart!"
-    })
+
+    if(checkIfExist) return next(new ErrorHandler("Product is already added in the cart!", 400))
     
     const prod = await Product.findOne({_id: productId})
 
@@ -53,10 +45,7 @@ export const addToCart = async (req,res) => {
             message: "Product added to the cart successfully!"
         })
     } else {
-        return res.status(400).json({
-          success: false,
-          message: "Not enough quantity!"
-        })
+        return next(new ErrorHandler("Not enough quantity!", 400))
     }
 }
 
@@ -78,10 +67,7 @@ export const increaseQuantity = async(req,res,next)=>{
           message: "Product Quantity Increased!"
       })
   } else {
-      return res.status(400).json({
-          success: false,
-          message: "Not Updated!"
-      })
+      return next(new ErrorHandler("Not updated!", 400))
   }
 }
 
@@ -105,11 +91,8 @@ export const reduceQuantity = async(req,res,next)=>{
           success: true,
           message: "Product Quantity Reduced!"
       })
-  } else {
-      return res.status(400).json({
-          success: false,
-          message: "Not Updated!"
-      })
+  } else { 
+      return next(new ErrorHandler("Not updated!", 400))
   }
 }
 
@@ -123,8 +106,6 @@ export const removeCartItem = async(req,res,next)=>{
       message: "Item removed successfully!"
   })
   else {
-      return res.status(400).json({
-          message: "Item not found!"
-      })
+      return next(new ErrorHandler("Not removed!", 400))
   }
 }

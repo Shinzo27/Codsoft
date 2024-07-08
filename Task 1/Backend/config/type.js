@@ -16,7 +16,6 @@ export const ProductType = z.object({
     description: z.string(),
     quantity: z.string(),
     price: z.string(),
-    isActive: z.string(),
     category: z.string()
 })
 

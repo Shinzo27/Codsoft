@@ -1,52 +1,38 @@
 import Category from "../Models/Category.js";
 import Product from "../Models/Products.js";
+import ErrorHandler from "../Middleware/ErrorHandler.js";
 import { ProductType } from "../config/type.js";
 import cloudinary from "cloudinary";
 
-export const addProduct = async (req, res) => {
+export const addProduct = async (req, res, next) => {
   const bodyParser = req.body;
   const { img } = req.files;
   const parsedPayload = ProductType.safeParse(bodyParser);
   const allowedFormats = ["image/png", "image/jpeg", "image/webp", "image/jpg"];
 
   if (!parsedPayload.success)
-    return res.status(400).json({
-      success: false,
-      message: "Fill all details properly!",
-      error: parsedPayload.error,
-    });
+    return next(new ErrorHandler("Fill all the details properly!", 400))
 
-  if (!allowedFormats.includes(img.mimetype))
-    return res.status(400).json({
-      success: false,
-      message: "File format not supported!",
-    });
+  if (!allowedFormats.includes(img.mimetype)) return next(new ErrorHandler("File format not supported!", 400))
 
-  const isExists = await Product.findOne({ name: parsedPayload.data.name });
+  const prodName = parsedPayload.data.name.toLowerCase();
 
-  if (isExists)
-    return res.status(400).json({
-      success: false,
-      message: "Product name already taken!",
-    });
+  const isExists = await Product.findOne({ name: prodName });
+
+  if (isExists) return next(new ErrorHandler("Product already exists!", 400))
 
   const cloudinaryResponse = await cloudinary.uploader.upload(img.tempFilePath);
 
-  if (!cloudinaryResponse || cloudinaryResponse.error)
-    return res.status(400).json({
-      success: false,
-      message: "Something went wrong!",
-    });
-  const getCategory = await Category.find({ name: parsedPayload.data.category })
+  if (!cloudinaryResponse || cloudinaryResponse.error) return next(new ErrorHandler("Something went wrong!", 400))
 
-  const prodName = parsedPayload.data.name.toLowerCase();
+  const getCategory = await Category.findOne({ name: parsedPayload.data.category })
+
   const product = await Product.create({
     name: prodName,
     imgUrl: cloudinaryResponse.secure_url,
     description: parsedPayload.data.description,
     quantity: parsedPayload.data.quantity,
     price: parsedPayload.data.price,
-    isActive: parsedPayload.data.isActive,
     category: getCategory._id
   });
 
