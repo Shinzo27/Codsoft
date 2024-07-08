@@ -55,7 +55,7 @@ const Hero = () => {
                                     <h1 className="text-5xl sm:text-6xl lg:text-5xl font-bold">{data.title}</h1>
                                     <h1 className="text-5xl uppercase text-white sm:text-[80px] md:text-[100px] xl:text-[150px] font-bold">{data.title2}</h1>
                                     <div>
-                                        <Button text={"Shop Now"}/>
+                                        <Button text={"Shop Now"} to={"/products"}/>
                                     </div>
                                 </div>
                                 <div className="order-1 sm:order-2">

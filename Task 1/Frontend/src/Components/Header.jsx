@@ -3,13 +3,16 @@ import { IoCart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { HiMenu } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../main";
 import { LuLogOut } from "react-icons/lu";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [toggleButton, setToggleButton] = useState(false);
-  const { isAuthenticated, setAuthenticated, user } = useContext(Context)
+  const { isAuthenticated, setIsAuthenticated, user, setUser } =
+    useContext(Context);
   const MenuLinks = [
     {
       id: 1,
@@ -26,19 +29,34 @@ const Header = () => {
       name: "About",
       link: "/about",
     },
-    isAuthenticated ? {
-      id: 4,
-      name: user.username,
-      link: "/profile"
-    } : {
-      id: 4,
-      name: "Login",
-      link: "/login"
-    }
+    isAuthenticated
+      ? {
+          id: 4,
+          name: user.username,
+          link: "/profile",
+        }
+      : {
+          id: 4,
+          name: "Login",
+          link: "/login",
+        },
   ];
-  const logoutHandler = async()=>{
-    
-  }
+  const navigateTo = useNavigate()
+  const logoutHandler = async () => {
+    await axios
+      .get("http://localhost:8000/api/v1/user/customer/logout", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        setIsAuthenticated(false);
+        setUser("");
+        navigateTo('/')
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  };
 
   return (
     <div
@@ -69,9 +87,7 @@ const Header = () => {
               <Link to="/cart">
                 <IoCart className="hover:text-orange-500" />
               </Link>
-              <Link to="/logout">
-                <LuLogOut />
-              </Link>
+              {isAuthenticated ?  <Link to="/logout" onClick={logoutHandler}><LuLogOut /></Link> : null}
               <div>
                 <button>
                   {toggleButton ? (
@@ -97,7 +113,7 @@ const Header = () => {
         }`}
       >
         <div className="lg:flex-grow text-l">
-        <Link
+          <Link
             to="/"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 hover:text-orange-500"
           >
@@ -115,21 +131,21 @@ const Header = () => {
           >
             About
           </Link>
-          {
-            isAuthenticated ? <Link
-            to="/profile"
-            className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
-          >
-            {user.username}
-          </Link> :
-          <Link
-          to="/login"
-          className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
-        >
-          Login
-        </Link>
-          }
-          
+          {isAuthenticated ? (
+            <Link
+              to="/profile"
+              className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
+            >
+              {user.username}
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4 pb-5 hover:text-orange-500"
+            >
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>
