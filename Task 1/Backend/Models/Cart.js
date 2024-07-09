@@ -4,7 +4,6 @@ const cartSchema = new Schema({
     userId:{
         type:String,
         required:true,
-        unique:true,
         index:true,
     },
     productId:{
@@ -15,7 +14,6 @@ const cartSchema = new Schema({
     quantity:{
         type:String,
         required:true,
-        unique:true,
     },
     totalPrice:{
         type:String,
