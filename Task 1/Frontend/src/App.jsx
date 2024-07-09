@@ -20,7 +20,6 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log(user.username);
         const response = await axios.get(
           "http://localhost:8000/api/v1/user/customer/me",
           {
