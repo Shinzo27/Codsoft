@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from 'axios'
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
@@ -6,8 +6,11 @@ import driedFruit2 from "../assets/driedfruit2.jpg";
 import driedFruit1 from "../assets/driedfruit1.jpg";
 import CartItem from "../Components/CartItem";
 import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
+import { Context } from "../main";
 
 const Cart = () => {
+  const {isAuthenticated} = useContext(Context)
   const [cartItems, setCartItems] = useState();
   async function getCartItems(){
     const { data } = await axios.get('http://localhost:8000/api/v1/cart/display', {withCredentials: true})
@@ -28,7 +31,7 @@ const Cart = () => {
   useEffect(()=>{
     getCartItems()
   }, [])
-
+  if(!isAuthenticated) return <Navigate to={'/login'}/>
   return (
     <>
       <h2 className="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black pt-6">

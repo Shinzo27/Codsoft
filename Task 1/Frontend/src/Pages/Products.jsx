@@ -76,27 +76,13 @@ const Product = () => {
                     img={product.imgUrl}
                     ProductName={product.name}
                     ProductPrice={product.price}
+                    id={product._id}
+                    key={product._id}
                   />
                 ))}
             </div>
-          </div>
+          </div>  
         ))}
-        {/* {Array.isArray(categoriesWithProducts) ? (
-            categoriesWithProducts.map((category) => (
-              <div key={category._id}>
-              <h2>{category.categoryName}</h2>
-                <ul>
-                  {category.products.map((product) => (
-                    <li key={product._id}>
-                      {product.name} - ${product.price}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p>No categories found.</p>
-          )} */}
       </div>
     </>
   );

@@ -41,7 +41,7 @@ const Header = () => {
           link: "/login",
         },
   ];
-  const navigateTo = useNavigate()
+  const navigateTo = useNavigate();
   const logoutHandler = async () => {
     await axios
       .get("http://localhost:8000/api/v1/user/customer/logout", {
@@ -51,7 +51,7 @@ const Header = () => {
         toast.success(res.data.message);
         setIsAuthenticated(false);
         setUser("");
-        navigateTo('/')
+        navigateTo("/");
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -84,10 +84,16 @@ const Header = () => {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-4 text-2xl">
-              <Link to="/cart">
-                <IoCart className="hover:text-orange-500" />
-              </Link>
-              {isAuthenticated ?  <Link to="/logout" onClick={logoutHandler}><LuLogOut /></Link> : null}
+              {isAuthenticated ? (
+                <div className="flex items-center gap-4 text-2xl">
+                  <Link to="/cart">
+                    <IoCart className="hover:text-orange-500" />
+                  </Link>
+                  <Link to="/logout" onClick={logoutHandler}>
+                    <LuLogOut className="hover:text-orange-500"/>
+                  </Link>
+                </div>
+              ) : null}
               <div>
                 <button>
                   {toggleButton ? (
