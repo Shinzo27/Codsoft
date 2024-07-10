@@ -29,6 +29,11 @@ const Header = () => {
       name: "About",
       link: "/about",
     },
+    {
+      id: 5,
+      name: "Cart",
+      link: "/cart",
+    },
     isAuthenticated
       ? {
           id: 4,
@@ -86,12 +91,16 @@ const Header = () => {
             <div className="flex items-center gap-4 text-2xl">
               {isAuthenticated ? (
                 <div className="flex items-center gap-4 text-2xl">
-                  <Link to="/cart">
-                    <IoCart className="hover:text-orange-500" />
-                  </Link>
-                  <Link to="/logout" onClick={logoutHandler}>
-                    <LuLogOut className="hover:text-orange-500"/>
-                  </Link>
+                  <button>
+                    <Link to={"/cart"}>
+                      <IoCart className="hover:text-orange-500" />
+                    </Link>
+                  </button>
+                  <button>
+                    <Link to="/logout" onClick={logoutHandler}>
+                      <LuLogOut className="hover:text-orange-500"/>
+                    </Link>
+                  </button>
                 </div>
               ) : null}
               <div>

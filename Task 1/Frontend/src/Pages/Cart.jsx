@@ -11,12 +11,11 @@ import { Context } from "../main";
 
 const Cart = () => {
   const {isAuthenticated} = useContext(Context)
-  const [cartItems, setCartItems] = useState();
+  const [cartItems, setCartItems] = useState([]);
   const [ total, setTotal ] = useState();
 
-  async function getCartItems(){
+  const getCartItems = async() => {
     const { data } = await axios.get('http://localhost:8000/api/v1/cart/display', {withCredentials: true})
-    console.log(data.cartItems)
     if(data){
       setCartItems(data.cartItems)
       calculateTotal(data.cartItems)
@@ -26,29 +25,20 @@ const Cart = () => {
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
     setTotal(total);
-    console.log(total)
   };
-
-  async function increaseQuantity(id){
-    const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
-    console.log(data);
-  }
-
-  async function decreaseQuantity(id){
-    const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
-    console.log(data);
-  }
 
   useEffect(()=>{
     getCartItems()
   }, [])
-  if(!isAuthenticated) return <Navigate to={'/login'}/>
+
+  // if(!isAuthenticated) return <Navigate to={'/login'}/>
+  
   return (
     <>
       <h2 className="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black pt-6">
             Shopping Cart
           </h2>
-      { cartItems ? 
+      { cartItems.length > 0 ? 
       <section className=" py-6 relative">
         <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto"> 
           <div className="hidden lg:grid grid-cols-2 py-6">
@@ -62,7 +52,6 @@ const Cart = () => {
               <span className="w-full max-w-[200px] text-center">Total</span>
             </p>
           </div>
-            {/* <CartItem img={driedFruit1} prodName={"Dried Fruit"} packType={"250gm"} prodPrice={"750"} quantity={"2"} total={"1400"}/> */}
             {
               cartItems.map((item)=>(
                 <div key={item._id}>

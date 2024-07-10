@@ -1,21 +1,42 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const CartItem = ({product, quantity, total, id}) => {
-  const initialState = product
+  const [singleProduct, setSingleProduct] = useState()
   const navigateTo = useNavigate()
-  const [ isDelete, setIsDelete ] = useState()
+
+  useEffect(()=>{
+    setSingleProduct(product)
+  }, [singleProduct])
 
   const deleteItem = async(id) => {
     try {
-      const { data } = await axios.delete(`http://localhost:8000/api/v1/cart/removeItem/${id}`, {withCredentials: true})
-      toast.success(data.message)
-      navigateTo(location.pathname, { replace: true })
+      await axios.delete(`http://localhost:8000/api/v1/cart/removeItem/${id}`, {withCredentials: true}).then((res)=>{
+        toast.success(res.data.message)
+        window.location.reload()
+      })
     } catch (error) {
-      toast.error(error.data.message)
+      toast.error(error.response.data.message)
+    }
+  }
+
+  async function increaseQuantity(id){
+    const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/${id}`, {}, {withCredentials: true})
+    toast.success(data.message)
+    window.location.reload()
+  }
+
+  async function decreaseQuantity(id){
+    try {
+      const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/${id}`, {}, {withCredentials: true})
+      toast.success(data.message)
+      window.location.reload()
+    } catch (error) {
+      // toast.error(error)
+      toast.error(error.response.data.message);
     }
   }
 
@@ -40,7 +61,7 @@ const CartItem = ({product, quantity, total, id}) => {
       </div>
       <div className="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2">
         <div className="flex items-center w-full mx-auto justify-center">
-          <button type="button" className="group rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
+          <button type="button" className="group rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50" onClick={()=>decreaseQuantity(product._id)}>
             <svg
               className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
               xmlns="http://www.w3.org/2000/svg"
@@ -74,9 +95,10 @@ const CartItem = ({product, quantity, total, id}) => {
           <input
             type="text"
             className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
+            readOnly
             defaultValue={product.quantity}
           />
-          <button className="group rounded-r-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
+          <button className="group rounded-r-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50" onClick={()=>increaseQuantity(product._id)}>
             <svg
               className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
               xmlns="http://www.w3.org/2000/svg"
