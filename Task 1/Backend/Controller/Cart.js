@@ -9,7 +9,6 @@ export const displayItems = async (req, res, next) => {
     "productId",
     "imgUrl name price",
   );
-  console.log(cartItems);
   return res.status(200).json({
     cartItems,
   });

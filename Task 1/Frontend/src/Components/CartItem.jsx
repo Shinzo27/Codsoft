@@ -1,25 +1,40 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { MdDeleteForever } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const CartItem = ({img, prodName, packType, prodPrice, quantity, total}) => {
+const CartItem = ({product, quantity, total, id}) => {
+  const initialState = product
+  const navigateTo = useNavigate()
+  const [ isDelete, setIsDelete ] = useState()
+
+  const deleteItem = async(id) => {
+    try {
+      const { data } = await axios.delete(`http://localhost:8000/api/v1/cart/removeItem/${id}`, {withCredentials: true})
+      toast.success(data.message)
+      navigateTo(location.pathname, { replace: true })
+    } catch (error) {
+      toast.error(error.data.message)
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-6 border-t border-gray-200 py-6">
       <div className="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
         <div className="img-box">
           <img
-            src={img}
+            src={product.productId.imgUrl}
             alt="perfume bottle image"
             className="xl:w-[140px] sm: w-72"
           />
         </div>
         <div className="pro-data w-full max-w-sm ">
           <h5 className="font-semibold text-xl leading-8 text-black max-[550px]:text-center">
-            {prodName}
+            {product.productId.name}
           </h5>
-          <p className="font-normal text-lg leading-8 text-gray-500 my-2 min-[550px]:my-3 max-[550px]:text-center">
-            {packType}
-          </p>
           <h6 className="font-medium text-lg leading-8 text-indigo-600  max-[550px]:text-center">
-            ₹{prodPrice}
+            ₹{product.productId.price}
           </h6>
         </div>
       </div>
@@ -59,7 +74,7 @@ const CartItem = ({img, prodName, packType, prodPrice, quantity, total}) => {
           <input
             type="text"
             className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
-            defaultValue={quantity}
+            defaultValue={product.quantity}
           />
           <button className="group rounded-r-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
             <svg
@@ -93,9 +108,12 @@ const CartItem = ({img, prodName, packType, prodPrice, quantity, total}) => {
             </svg>
           </button>
         </div>
-        <h6 className="text-indigo-600 font-manrope font-bold text-2xl leading-9 w-full max-w-[176px] text-center">
-          ₹{total}
+        <h6 className="text-indigo-600 lg:pl-14 font-manrope font-bold text-2xl leading-9 w-full max-w-[176px] text-center">
+          ₹{product.totalPrice}
         </h6>
+        <button className="group rounded-r-full" onClick={()=>deleteItem(product._id)}>
+          <MdDeleteForever className=" text-3xl text-red-500"/>
+        </button>
       </div>
     </div>
   );

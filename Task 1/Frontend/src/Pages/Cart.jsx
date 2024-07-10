@@ -6,7 +6,7 @@ import driedFruit2 from "../assets/driedfruit2.jpg";
 import driedFruit1 from "../assets/driedfruit1.jpg";
 import CartItem from "../Components/CartItem";
 import { toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Context } from "../main";
 
 const Cart = () => {
@@ -66,7 +66,7 @@ const Cart = () => {
             {
               cartItems.map((item)=>(
                 <div key={item._id}>
-                  <CartItem img={item.productId.imgUrl} prodName={item.productId.name} prodPrice={item.productId.price} quantity={item.quantity} total={item.totalPrice}/>
+                  <CartItem product={item}/>
                 </div>
               ))
             }
@@ -91,9 +91,9 @@ const Cart = () => {
           </div>
           <div className="flex items-center flex-col sm:flex-row justify-center gap-3 mt-8">
             <button className="rounded-full py-4 w-full max-w-[280px]  flex items-center bg-indigo-50 justify-center transition-all duration-500 hover:bg-indigo-100">
-              <span className="px-2 font-semibold text-lg leading-8 text-indigo-600">
+              <Link className="px-2 font-semibold text-lg leading-8 text-indigo-600" to={"/products"}>
                 Continue Shopping
-              </span>
+              </Link>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="22"
