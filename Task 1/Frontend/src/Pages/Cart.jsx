@@ -12,17 +12,28 @@ import { Context } from "../main";
 const Cart = () => {
   const {isAuthenticated} = useContext(Context)
   const [cartItems, setCartItems] = useState();
+  const [ total, setTotal ] = useState();
+
   async function getCartItems(){
     const { data } = await axios.get('http://localhost:8000/api/v1/cart/display', {withCredentials: true})
-    console.log(data)
+    console.log(data.cartItems)
     if(data){
       setCartItems(data.cartItems)
+      calculateTotal(data.cartItems)
     }
   }
+
+  const calculateTotal = (items) => {
+    const total = items.reduce((sum, item) => sum + item.productId.price * item.quantity, 0);
+    setTotal(total);
+    console.log(total)
+  };
+
   async function increaseQuantity(id){
     const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
     console.log(data);
   }
+
   async function decreaseQuantity(id){
     const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/667fbd36292506d4d957d631`, {}, {withCredentials: true})
     console.log(data);
@@ -51,16 +62,21 @@ const Cart = () => {
               <span className="w-full max-w-[200px] text-center">Total</span>
             </p>
           </div>
-            <CartItem img={driedFruit1} prodName={"Dried Fruit"} packType={"250gm"} prodPrice={"750"} quantity={"2"} total={"1400"}/>
-            <CartItem img={driedFruit2} prodName={"Dried Strawberry"} packType={"250gm"} prodPrice={"350"} quantity={"2"} total={"700"}/>
-            <CartItem img={driedFruit1} prodName={"Dried Fruit"} packType={"250gm"} prodPrice={"750"} quantity={"2"} total={"1400"}/>
+            {/* <CartItem img={driedFruit1} prodName={"Dried Fruit"} packType={"250gm"} prodPrice={"750"} quantity={"2"} total={"1400"}/> */}
+            {
+              cartItems.map((item)=>(
+                <div key={item._id}>
+                  <CartItem img={item.productId.imgUrl} prodName={item.productId.name} prodPrice={item.productId.price} quantity={item.quantity} total={item.totalPrice}/>
+                </div>
+              ))
+            }
           <div className="bg-gray-50 rounded-xl p-6 w-full mb-8 max-lg:max-w-xl max-lg:mx-auto">
             <div className="flex items-center justify-between w-full mb-6">
               <p className="font-normal text-xl leading-8 text-gray-400">
                 Sub Total
               </p>
               <h6 className="font-semibold text-xl leading-8 text-gray-900">
-                ₹360.00
+                ₹{total}
               </h6>
             </div>
             <div className="flex items-center justify-between w-full pb-6 border-b border-gray-200"></div>
@@ -69,7 +85,7 @@ const Cart = () => {
                 Total
               </p>
               <h6 className="font-manrope font-medium text-2xl leading-9 text-indigo-500">
-                ₹360.00
+                ₹{total}
               </h6>
             </div>
           </div>

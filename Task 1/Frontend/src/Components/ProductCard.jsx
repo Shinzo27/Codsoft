@@ -29,7 +29,7 @@ const ProductCard = ({ id, img, ProductName, ProductPrice}) => {
           <h1 className='font-semibold capitalize'>{ProductName}</h1>
           <h2 className=' font-medium pt-2'>₹{ProductPrice}</h2>
           <div className='pt-3 pl-4'>
-            <button className="bg-blue-500 text-white font-semibold cursor-pointer hover:scale-105 py-2 px-8 rounded-full relative z-10" onClick={()=>addToCart(user._id, id, 1)}>Add to cart</button>
+            <button type='button' className="bg-blue-500 text-white font-semibold cursor-pointer hover:scale-105 py-2 px-8 rounded-full relative z-10" onClick={()=>addToCart(user._id, id, 1)}>Add to cart</button>
           </div>
         </div>
         <div className=' h-28 w-28 mr-4'>

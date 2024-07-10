@@ -7,9 +7,9 @@ export const displayItems = async (req, res, next) => {
   
   const cartItems = await Cart.find({ userId }).populate(
     "productId",
-    "name, imgUrl"
+    "imgUrl name price",
   );
-
+  console.log(cartItems);
   return res.status(200).json({
     cartItems,
   });

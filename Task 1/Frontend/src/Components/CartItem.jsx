@@ -25,7 +25,7 @@ const CartItem = ({img, prodName, packType, prodPrice, quantity, total}) => {
       </div>
       <div className="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto gap-2">
         <div className="flex items-center w-full mx-auto justify-center">
-          <button className="group rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
+          <button type="button" className="group rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
             <svg
               className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
               xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ const CartItem = ({img, prodName, packType, prodPrice, quantity, total}) => {
           <input
             type="text"
             className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
-            value={quantity}
+            defaultValue={quantity}
           />
           <button className="group rounded-r-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50">
             <svg

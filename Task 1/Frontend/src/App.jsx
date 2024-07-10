@@ -28,7 +28,6 @@ function App() {
         );
         setIsAuthenticated(true);
         setUser(response.data.user);
-        console.log(response.data);
       } catch (error) {
         setIsAuthenticated(false);
         setUser({});
