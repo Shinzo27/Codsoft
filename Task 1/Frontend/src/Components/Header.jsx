@@ -29,11 +29,6 @@ const Header = () => {
       name: "About",
       link: "/about",
     },
-    {
-      id: 5,
-      name: "Cart",
-      link: "/cart",
-    },
     isAuthenticated
       ? {
           id: 4,

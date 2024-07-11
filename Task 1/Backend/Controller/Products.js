@@ -45,8 +45,8 @@ export const addProduct = async (req, res, next) => {
 
 export const getProduct = async (req, res) => {
   const filter = req.query.filter || "";
-  console.log(filter);
-  const users = await Product.find({
+  
+  const products = await Product.find({
     $and: [
       {
         name: {
@@ -57,12 +57,12 @@ export const getProduct = async (req, res) => {
   });
 
   res.json({
-    product: users.map((user) => ({
-      username: user.name,
-      imgUrl: user.imgUrl,
-      description: user.description,
-      price: user.price,
-      category: user.category,
+    product: products.map((product) => ({
+      username: product.name,
+      imgUrl: product.imgUrl,
+      description: product.description,
+      price: product.price,
+      category: product.category,
     })),
   });
 };

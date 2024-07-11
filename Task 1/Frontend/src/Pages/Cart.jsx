@@ -30,8 +30,6 @@ const Cart = () => {
   useEffect(()=>{
     getCartItems()
   }, [])
-
-  // if(!isAuthenticated) return <Navigate to={'/login'}/>
   
   return (
     <>

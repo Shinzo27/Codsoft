@@ -14,7 +14,7 @@ const ProductCard = ({ id, img, ProductName, ProductPrice}) => {
         const { data } = await axios.post(`http://localhost:8000/api/v1/cart/addToCart/${productId}`, {quantity}, {withCredentials: true})
         toast.success(data.message)
       } catch (error) {
-        toast.error(error.data.message)
+        toast.error(error.response.data.message);
       }
     } else {
       toast.error("User is not loggedin!")
