@@ -58,6 +58,7 @@ export const getProduct = async (req, res) => {
 
   res.json({
     product: products.map((product) => ({
+      _id: product._id,
       username: product.name,
       imgUrl: product.imgUrl,
       description: product.description,
@@ -89,6 +90,6 @@ export const categoryProduct = async (req, res) => {
     },
   ]);
   res.json({
-    productsByCategory
+    product: productsByCategory
   })
 };
