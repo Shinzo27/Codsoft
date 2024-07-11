@@ -9,39 +9,25 @@ import Navbar from "../Components/Header";
 import Footer from "../Components/Footer";
 
 const Product = () => {
-  const [categoriesWithProducts, setCategoriesWithProducts] = useState([]);
+  const [product, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // async function getProduts() {
-  //   const { data } = await axios.get(
-  //     `http://localhost:8000/api/v1/product/categoryProduct`,
-  //     { withCredentials: true }
-  //   );
-  //   console.log(data.productsByCategory);
-  //   setCategoriesWithProducts(data.productsByCategory);
-  // }
-  // useEffect(() => {
-  //   getProduts();
-  // }, []);
+  const fetchProducts = async (query) => {
+    try {
+      const response = query
+      ? await axios.get(`http://localhost:8000/api/v1/product/filterProduct?filter=${searchQuery}`)
+      : await axios.get('http://localhost:8000/api/v1/product/categoryProduct');
+      setProducts(response.data.product);
+    } catch (err) {
+      console.error(err);
+      setProducts([]);  // Ensure products state is reset on error
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-          let response;
-          if (searchQuery.trim() === '') {
-            response = await axios.get('http://localhost:8000/api/v1/product/categoryProduct');
-          } else {
-            response = await axios.get(`http://localhost:8000/api/v1/product/filterProduct?filter=${searchQuery}`);
-          }
-        setCategoriesWithProducts(response.data.product)
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    fetchProducts(searchQuery);
+  }, [searchQuery]);
 
-    fetchProducts()
-  }, [searchQuery])
-  
   return (
     <>
       <div className="container pt-5">
@@ -77,15 +63,15 @@ const Product = () => {
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search Products"
                 required
-                defaultValue={''}
+                value={searchQuery}
                 onChange={(e)=>setSearchQuery(e.target.value)}
               />
+              <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
             </div>
           </form>
         </div>
-        {/*  */}
         {searchQuery.trim() === '' ? (
-          categoriesWithProducts.map((category) => (
+          product.map((category) => (
             <div key={category._id} className="pt-6">
               <div className=" w-full h-16 bg-blue-500 flex items-center justify-center text-white rounded-xl">
                 <h1 className="text-3xl">{category.categoryName}</h1>
@@ -104,7 +90,7 @@ const Product = () => {
             </div>
           ))
         ) : (
-          categoriesWithProducts.map((product)=>(
+          product.map((product)=>(
             <div key={product._id} className="pt-6 flex items-center justify-center">
               <ProductCard img={product.imgUrl} ProductName={product.username} ProductPrice={product.price} id={product._id} key={product._id}/>
             </div>
