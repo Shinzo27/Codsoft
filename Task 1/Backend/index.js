@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 import userRouter from './Routes/Users.js'
 import productRouter from './Routes/Products.js'
 import cartRouter from './Routes/Cart.js'
-import paymentRouter from './Routes/Payment.js'
+import checkoutRouter from './Routes/Order.js'
 import cookieParser from 'cookie-parser'
 import cloudinary from 'cloudinary'
 import fileUpload from 'express-fileupload'
@@ -13,7 +13,7 @@ import { checkForAuthentication } from './Utils/Auth.js'
 import categoryRouter from './Routes/Category.js'
 import cors from 'cors'
 
-const app = express()
+export const app = express()
 const PORT = process.env.PORT || 8000
 config({path: './config/.env'})
 
@@ -46,15 +46,11 @@ app.use(
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/product', productRouter)
 app.use('/api/v1/cart', cartRouter)
-app.use('/api/v1/payment', paymentRouter)
 app.use('/api/v1/category', categoryRouter)
+app.use('/api/v1/checkout', checkoutRouter)
 
 app.get('/', (req,res)=>{
     res.send("Hello World")
 })
 
 app.use(errorMiddleware)
-
-app.listen(PORT, ()=>{
-    console.log("Server Started at Port: " + PORT);
-})

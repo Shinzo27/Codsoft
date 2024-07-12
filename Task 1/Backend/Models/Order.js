@@ -31,7 +31,11 @@ var orderSchema = new Schema({
         name: String,
         quantity: String,
         price: String
-    }]
+    }],
+    orderId: {
+        type: String,
+        required:true
+    }
 });
 
 const Order = model('Order', orderSchema);
