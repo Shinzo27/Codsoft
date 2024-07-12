@@ -12,12 +12,17 @@ import { errorMiddleware } from './Middleware/ErrorHandler.js'
 import { checkForAuthentication } from './Utils/Auth.js'
 import categoryRouter from './Routes/Category.js'
 import cors from 'cors'
-
+import Razorpay from 'razorpay'
 export const app = express()
 const PORT = process.env.PORT || 8000
 config({path: './config/.env'})
 
 mongoose.connect(process.env.MONGO_URI, console.log("MongoDB Connected"))
+
+export const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_API_KEY,
+    key_secret: process.env.RAZORPAY_APT_SECRET,
+  });
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -54,3 +59,7 @@ app.get('/', (req,res)=>{
 })
 
 app.use(errorMiddleware)
+
+app.listen(PORT, ()=>{
+    console.log("Server Started at Port: " + PORT);
+})
