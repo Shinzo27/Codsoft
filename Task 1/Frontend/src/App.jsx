@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useContext, useEffect } from 'react'
 import { Context } from './main'
 import axios from 'axios'
+import PaymentSuccess from './Pages/PaymentSuccess'
+import UserDetails from './Pages/UserDetails'
 
 function App() {
   const { isAuthenticated, setIsAuthenticated, user, setUser} = useContext(Context)
@@ -45,6 +47,8 @@ function App() {
           <Route path='/cart' element={<Cart/>}/>
           <Route path='/about' element={<About/>}/>
           <Route path='/signup' element={<Signup/>}/>
+          <Route path='/paymentSuccess' element={<PaymentSuccess/>}/>
+          <Route path='/userdetails' element={<UserDetails/>}/>
         </Routes>
       <Footer/>
       <ToastContainer position='top-center'/>

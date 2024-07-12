@@ -15,8 +15,8 @@ const CartItem = ({product, quantity, total, id}) => {
   const deleteItem = async(id) => {
     try {
       await axios.delete(`http://localhost:8000/api/v1/cart/removeItem/${id}`, {withCredentials: true}).then((res)=>{
-        toast.success(res.data.message)
         window.location.reload()
+        toast.success(res.data.message)
       })
     } catch (error) {
       toast.error(error.response.data.message)
@@ -25,15 +25,15 @@ const CartItem = ({product, quantity, total, id}) => {
 
   async function increaseQuantity(id){
     const { data } = await axios.put(`http://localhost:8000/api/v1/cart/increaseQuantity/${id}`, {}, {withCredentials: true})
-    toast.success(data.message)
     window.location.reload()
+    toast.success(data.message)
   }
 
   async function decreaseQuantity(id){
     try {
       const { data } = await axios.put(`http://localhost:8000/api/v1/cart/reduceQuantity/${id}`, {}, {withCredentials: true})
-      toast.success(data.message)
       window.location.reload()
+      toast.success(data.message)
     } catch (error) {
       // toast.error(error)
       toast.error(error.response.data.message);
@@ -44,7 +44,7 @@ const CartItem = ({product, quantity, total, id}) => {
     <div className="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-6 border-t border-gray-200 py-6">
       <div className="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
         <div className="img-box">
-          <img
+            <img
             src={product.productId.imgUrl}
             alt="perfume bottle image"
             className="xl:w-[140px] sm: w-72"

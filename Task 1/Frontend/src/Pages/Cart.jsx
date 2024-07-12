@@ -8,6 +8,7 @@ import CartItem from "../Components/CartItem";
 import { toast } from "react-toastify";
 import { Link, Navigate } from "react-router-dom";
 import { Context } from "../main";
+import logo from '../../public/razorpay_logo.png'
 
 const Cart = () => {
   const { isAuthenticated, user } = useContext(Context);
@@ -47,7 +48,7 @@ const Cart = () => {
       currency: "INR",
       name: "Patel's Dryfruit and Masala",
       description: "Grocery store",
-      image: ".\logo.png",
+      image: {logo},
       order_id: order.id,
       callback_url: "http://localhost:8000/api/v1/checkout/verifyPayment",
       prefill: {
@@ -57,7 +58,7 @@ const Cart = () => {
         address: "Razorpay Corporate Office",
       },
       theme: {
-        color: "#121212",
+        color: "#5e30eb",
       },
     };
     console.log(window);
