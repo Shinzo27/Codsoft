@@ -1,12 +1,103 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { Context } from "../main";
+import { Navigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import logo from "../../public/razorpay_logo.png";
+import { toast } from "react-toastify";
 
 const UserDetails = () => {
+  const { isAuthenticated, user } = useContext(Context);
+  const location = useLocation();
+  const total = location.state || {};
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
+  const userDetails = {
+    address,
+    city,
+    state,
+    pincode,
+  };
+
+  const checkoutHandler = async () => {
+    const {
+      data: { order },
+    } = await axios.post(
+      "http://localhost:8000/api/v1/checkout/createOrder",
+      { amount: total },
+      { withCredentials: true }
+    );
+
+    const options = {
+      key: "rzp_test_ObIKOxkah2XMbc",
+      amount: order.amount,
+      currency: "INR",
+      name: "Patel's Dryfruit and Masala",
+      description: "Grocery store",
+      image: { logo },
+      order_id: order.id,
+      callback_url: "http://localhost:8000/api/v1/checkout/verifyPayment",
+      prefill: {
+        name: user.name,
+      },
+      notes: {
+        address: userDetails.address,
+        city: userDetails.city,
+        state: userDetails.state,
+        pincode: userDetails.pincode,
+      },
+      theme: {
+        color: "#5e30eb",
+      },
+    };
+    console.log(window);
+    const razor = new window.Razorpay(options);
+    razor.on("payment.success", function (response) {
+      console.log(response);
+      handlePaymentSuccess(response, userDetails);
+    });
+    razor.on("payment.error", function (response) {
+      toast.error("Payment Failed");
+      console.error(response.error);
+    });
+    razor.open();
+  };
+
+    const handlePaymentSuccess = async (response, userDetails) => {
+      console.log(response);
+      const paymentData = {
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        userDetails: userDetails,
+      }
+
+      try {
+        const verifyResponse = await axios.post(
+          "http://localhost:8000/api/v1/checkout/verifyPayment",
+          paymentData
+        );
+        const verifyData = verifyResponse.data;
+        if (verifyData.success) {
+          // Move cart items to order table
+          await axios.post("http://localhost:8000/api/v1/checkout/complete", { userDetails });
+          console.log("Payment Successful and Order Created");
+        } else {
+          console.log("Payment Verification Failed");
+        }
+      } catch (error) {
+        console.error("Error verifying payment:", error);
+      }
+    };
+    
+  // if(!isAuthenticated) return <Navigate to={'/login'}/>
   return (
     <>
-      <div className="">
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-          <div>
-            <div className="relative w-full flex justify-center items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-900 ">
+      <div className="flex justify-center items-start">
+        <div className="w-96">
+          <div className="pt-40">
+            <div className="flex justify-center items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-900 ">
               <span className="">Enter User Details</span>
             </div>
             <div className="mt-5 bg-white rounded-lg shadow">
@@ -19,17 +110,17 @@ const UserDetails = () => {
               </div>
               <div className="px-5 pb-5">
                 <input
-                  placeholder="Name"
-                  className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
-                />
-                <input
                   placeholder="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                 />
                 <div className="flex">
                   <div className="flex-grow">
                     <input
                       placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
                       className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                     />
                   </div>
@@ -38,6 +129,8 @@ const UserDetails = () => {
                   <div className="flex-grow">
                     <input
                       placeholder="State"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
                       className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                     />
                   </div>
@@ -46,7 +139,9 @@ const UserDetails = () => {
                   <div className="flex-grow">
                     <input
                       placeholder="Pincode"
+                      value={pincode}
                       maxLength={6}
+                      onChange={(e) => setPincode(e.target.value)}
                       className=" text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400"
                     />
                   </div>
@@ -58,6 +153,7 @@ const UserDetails = () => {
                   <button
                     type="button"
                     className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform active:scale-95 ease-in-out"
+                    onClick={checkoutHandler}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

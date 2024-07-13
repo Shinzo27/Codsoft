@@ -6,9 +6,9 @@ import driedFruit2 from "../assets/driedfruit2.jpg";
 import driedFruit1 from "../assets/driedfruit1.jpg";
 import CartItem from "../Components/CartItem";
 import { toast } from "react-toastify";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Context } from "../main";
-import logo from '../../public/razorpay_logo.png'
+
 
 const Cart = () => {
   const { isAuthenticated, user } = useContext(Context);
@@ -33,38 +33,12 @@ const Cart = () => {
     );
     setTotal(total);
   };
+  const navigateTo = useNavigate()
 
-  const checkoutHandler = async () => {
-    const {
-      data: { order },
-    } = await axios.post(
-      "http://localhost:8000/api/v1/checkout/createOrder",
-      { amount: total },
-      { withCredentials: true }
-    );
-    const options = {
-      key: "rzp_test_ObIKOxkah2XMbc",
-      amount: order.amount,
-      currency: "INR",
-      name: "Patel's Dryfruit and Masala",
-      description: "Grocery store",
-      image: {logo},
-      order_id: order.id,
-      callback_url: "http://localhost:8000/api/v1/checkout/verifyPayment",
-      prefill: {
-        name: user.name,
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#5e30eb",
-      },
-    };
-    console.log(window);
-    const razor = new window.Razorpay(options);
-    razor.open();
-  };
+  const checkoutHandler = () =>{
+    navigateTo('/userdetails', { state: total})
+    // <Navigate to={'/userdetails'} state={total}/>
+  }
 
   useEffect(() => {
     getCartItems();
