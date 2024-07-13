@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../main";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import logo from "../../public/razorpay_logo.png";
 import { toast } from "react-toastify";
@@ -8,11 +8,13 @@ import { toast } from "react-toastify";
 const UserDetails = () => {
   const { isAuthenticated, user } = useContext(Context);
   const location = useLocation();
-  const total = location.state || {};
+  const total = location.state || "";
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [pincode, setPincode] = useState("");
+  const navigateTo = useNavigate()
+
   const userDetails = {
     address,
     city,
@@ -63,7 +65,6 @@ const UserDetails = () => {
   };
 
     const handlePaymentSuccess = async (response, userDetails) => {
-      console.log(response);
       const paymentData = {
         razorpay_order_id: response.razorpay_order_id,
         razorpay_payment_id: response.razorpay_payment_id,
@@ -78,8 +79,12 @@ const UserDetails = () => {
         );
         const verifyData = verifyResponse.data;
         if (verifyData.success) {
-          await axios.post("http://localhost:8000/api/v1/checkout/complete", { userDetails });
-          toast.success("Your order is placed!")
+          const res = await axios.post("http://localhost:8000/api/v1/checkout/complete", { userDetails, razorpay_order_id: paymentData.razorpay_order_id, total }, {withCredentials: true});
+          console.log(res);
+          if(res.data.success){
+             toast.success("Your order is placed!")
+             navigateTo('/paymentSuccess')
+          }
         } else {
           console.log("Payment Verification Failed");
         }
@@ -89,6 +94,8 @@ const UserDetails = () => {
     };
 
   // if(!isAuthenticated) return <Navigate to={'/login'}/>
+  console.log(total);
+  if(total === "") return <Navigate to={'/cart'}/>
   return (
     <>
       <div className="flex justify-center items-start">

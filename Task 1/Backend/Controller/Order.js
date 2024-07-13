@@ -6,6 +6,7 @@ import Cart from "../Models/Cart.js";
 import Order from "../Models/Order.js";
 
 export const checkout = async (req, res, next) => {
+  console.log(req.user);
   const { amount } = req.body
   console.log(amount);
   const options = {
@@ -34,7 +35,7 @@ export const verifyPayment = async (req, res, next) => {
     .digest("hex");
   console.log(expectedSignature);
   const isAuthentic = expectedSignature === razorpay_signature;
-  const userId = req.user._id
+  
   if (isAuthentic) {
     res.status(200).json({
       success: true
@@ -46,39 +47,43 @@ export const verifyPayment = async (req, res, next) => {
   }
 };
 
-export const completePayment = async(req,res) => {
+export const completePayment = async(req,res,next) => {
+  const { userDetails, razorpay_order_id, total } = req.body
   console.log(req.body);
-  // const cartItems = await Cart.find({userId})
+  const userId = req.user.id
+  console.log(userId);
+  const cartItems = await Cart.find({userId})
+  console.log(cartItems);
 
-  // if(!cartItems.length) {
-  //   return new ErrorHandler("No items in cart")
-  // }
+  if(!cartItems.length) {
+    return next(new ErrorHandler("No items in cart", 400))
+  }
 
-  // const totalAmount = cartItems.reduce((total, item) => total + (item.productId.price * item.quantity), 0);
-
-  // const newOrder = await Order.create({
-  //   user: userId,
-  //   address,
-  //   city,
-  //   state,
-  //   pincode,
-  //   total: totalAmount,
-  //   products: cartItems.map((item)=>{
-  //     name: item.productId.name;
-  //     quantity: item.quantity;
-  //     price: item.productId.price
-  //   }),
-  //   orderId: razorpay_order_id
-  // })
-
-  // await Cart.deleteMany({ userId })
-
-  // return res.redirect('http://localhost:5173/paymentSuccess')
-  // res.redirect(
-  //   `http://localhost:5173/paymentsuccess?reference=${razorpay_payment_id}`
-  // );
-  res.status(200).json({
-    success: true
+  const newOrder = await Order.create({
+    user: userId,
+    address: userDetails.address,
+    city: userDetails.city,
+    state: userDetails.state,
+    pincode: userDetails.pincode,
+    total: total,
+    products: cartItems.map((item)=>{
+      name: item.productId.name;
+      quantity: item.quantity;
+      price: item.productId.price
+    }),
+    orderId: razorpay_order_id
   })
+  console.log(newOrder);
+  const deleteItem = await Cart.deleteMany({ userId })
 
+  if(deleteItem){
+    return res.status(200).json({
+      success: true
+    })
+  }
+  else{
+    return res.status(400).json({
+      success: false
+    })
+  }
 }
