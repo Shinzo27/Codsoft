@@ -37,7 +37,9 @@ const UserDetails = () => {
       description: "Grocery store",
       image: { logo },
       order_id: order.id,
-      callback_url: "http://localhost:8000/api/v1/checkout/verifyPayment",
+      handler: function (response) {
+         handlePaymentSuccess(response,userDetails)
+      },
       prefill: {
         name: user.name,
       },
@@ -53,10 +55,6 @@ const UserDetails = () => {
     };
     console.log(window);
     const razor = new window.Razorpay(options);
-    razor.on("payment.success", function (response) {
-      console.log(response);
-      handlePaymentSuccess(response, userDetails);
-    });
     razor.on("payment.error", function (response) {
       toast.error("Payment Failed");
       console.error(response.error);
@@ -80,9 +78,8 @@ const UserDetails = () => {
         );
         const verifyData = verifyResponse.data;
         if (verifyData.success) {
-          // Move cart items to order table
           await axios.post("http://localhost:8000/api/v1/checkout/complete", { userDetails });
-          console.log("Payment Successful and Order Created");
+          toast.success("Your order is placed!")
         } else {
           console.log("Payment Verification Failed");
         }
@@ -90,7 +87,7 @@ const UserDetails = () => {
         console.error("Error verifying payment:", error);
       }
     };
-    
+
   // if(!isAuthenticated) return <Navigate to={'/login'}/>
   return (
     <>
