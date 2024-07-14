@@ -13,7 +13,9 @@ import { checkForAuthentication } from './Utils/Auth.js'
 import categoryRouter from './Routes/Category.js'
 import cors from 'cors'
 import Razorpay from 'razorpay'
-export const app = express()
+
+const app = express()
+
 const PORT = process.env.PORT || 8000
 config({path: './config/.env'})
 
