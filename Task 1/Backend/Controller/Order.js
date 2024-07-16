@@ -52,40 +52,31 @@ export const completePayment = async(req,res,next) => {
   if(!cartItems.length) {
     return next(new ErrorHandler("No items in cart", 400))
   }
-  console.log(cartItems);
-  const products = { 
-    products: cartItems.map((item)=>{
-      name: item.productId.name;
-      quantity: item.quantity;
-      price: item.productId.price
-    }),
-  }
-  console.log(products);
-  // console.log(cartItems);
-  // const newOrder = await Order.create({
-  //   user: userId,
-  //   address: userDetails.address,
-  //   city: userDetails.city,
-  //   state: userDetails.state,
-  //   pincode: userDetails.pincode,
-  //   total: total,
-  //   products: [cartItems.map((item)=>{
-  //     name: item.productId.name;
-  //     quantity: item.quantity;
-  //     price: item.productId.price
-  //   })],
-  //   orderId: razorpay_order_id
-  // })
-  // const deleteItem = await Cart.deleteMany({ userId })
 
-  // if(deleteItem){
-  //   return res.status(200).json({
-  //     success: true
-  //   })
-  // }
-  // else{
-  //   return res.status(400).json({
-  //     success: false
-  //   })
-  // }
+  const newOrder = await Order.create({
+    user: userId,
+    address: userDetails.address,
+    city: userDetails.city,
+    state: userDetails.state,
+    pincode: userDetails.pincode,
+    total: total,
+    products: cartItems.map(item=>({
+      name: item.productId.name,
+      quantity: item.quantity,
+      price: item.productId.price
+    })),
+    orderId: razorpay_order_id
+  })
+  const deleteItem = await Cart.deleteMany({ userId })
+
+  if(deleteItem){
+    return res.status(200).json({
+      success: true
+    })
+  }
+  else{
+    return res.status(400).json({
+      success: false
+    })
+  }
 }
