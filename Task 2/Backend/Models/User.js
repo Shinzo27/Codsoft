@@ -1,7 +1,6 @@
-import { Schema, model } from 'mongoose'; // Erase if already required
+import { Schema, model } from 'mongoose'; 
 
-// Declare the Schema of the Mongo model
-var userSchema = new Schema({
+const userSchema = new Schema({
     name:{
         type:String,
         required:true,
@@ -13,17 +12,17 @@ var userSchema = new Schema({
         required:true,
         unique:true,
     },
-    mobile:{
-        type:String,
-        required:true,
-        unique:true,
-    },
     password:{
         type:String,
         required:true,
     },
+    role: {
+        type: String,
+        required: true,
+        enum: ['Admin','Project Manager','TeamMember']
+    }
 });
 
 const User = model('User', userSchema);
-//Export the model
+
 export default User
