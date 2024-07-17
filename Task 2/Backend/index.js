@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 8000
 
 config({path: './Config/.env'})
 
+mongoose.connect(process.env.MONGO_URI).then(console.log("MongoDb Connected"))
+
 app.use(cors({
     origin: process.env.FRONTEND_URI,
     methods: ["GET","POST","PUT","DELETE"],
@@ -21,7 +23,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-// mongoose.connect()
+
 app.use('/api/v1/user', userRouter)
 
 app.get('/', (req,res)=>{
