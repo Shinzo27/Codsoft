@@ -3,13 +3,13 @@ import User from '../Models/User.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
-import { signupParser } from '../Config/Type.js'
+import { signinParser, signupParser } from '../Config/Type.js'
 
 export const signup = async(req,res,next) => {
     const bodyParser = req.body
     const parsedBody = signupParser.safeParse(bodyParser)
 
-    if(parsedBody.error) return next(new ErrorHandler(parsedBody.error,400))
+    if(parsedBody.error) return next(new ErrorHandler("Enter data correctly!",400))
 
     try {
         const ifExist = await User.findOne({email: parsedBody.data.email})
@@ -27,13 +27,17 @@ export const signup = async(req,res,next) => {
         const payload = {
             user: {
                 id: user._id,
-                role: user.role
+                role: user.role,
+                name: user.name
             }
         }
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000}, (err,token)=>{
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 600000}, (err,token)=>{
             if(err) throw err
-            res.json({token})
+            res.json({
+                success: true,
+                token
+            })
         })
     } catch (error) {
         console.error(error.message)
@@ -42,5 +46,39 @@ export const signup = async(req,res,next) => {
 }
 
 export const signin = async(req,res,next) => {
-    res.send("Hello world")
+    const bodyParser = req.body
+    const parsedBody = signinParser.safeParse(bodyParser)
+
+    if(parsedBody.error) return next(new ErrorHandler("Enter data correctly!", 400))
+    
+    try {
+        const user = await User.findOne({
+            email: parsedBody.data.email,
+        })
+
+        if(!user) return next(new ErrorHandler("Email not found!", 400))
+
+        const comparePassword = await bcrypt.compare(parsedBody.data.password,user.password)
+
+        if(!comparePassword) return next(new ErrorHandler("Password didn't matched!",400))
+
+        const payload = {
+            user: {
+                id: user._id,
+                role: user.role,
+                name: user.name
+            }
+        }
+
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 600000}, (err,token)=>{
+            if(err) throw err
+            res.json({
+                success: true,
+                token
+            })
+        })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send('Server Error')
+    }
 }
