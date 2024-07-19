@@ -7,6 +7,7 @@ import { errorMiddleware } from './Middlewares/ErrorHandler.js'
 import userRouter from './Routes/User.js'
 import projectRouter from './Routes/Project.js'
 import taskRouter from './Routes/Task.js'
+import commentRouter from './Routes/Comment.js'
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -28,6 +29,8 @@ app.use(express.json())
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/project', projectRouter)
+app.use('/api/v1/task', taskRouter)
+app.use('/api/v1/comment', commentRouter)
 
 app.get('/', (req,res)=>{
     res.send('Hello world')
