@@ -4,7 +4,6 @@ const userSchema = new Schema({
     name:{
         type:String,
         required:true,
-        unique:true,
         index:true,
     },
     email:{
@@ -19,7 +18,7 @@ const userSchema = new Schema({
     role: {
         type: String,
         required: true,
-        enum: ['Admin','User']
+        enum: ['Admin','Developer','UI/UX Designer','Tester', 'Other']
     }
 });
 

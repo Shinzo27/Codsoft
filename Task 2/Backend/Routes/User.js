@@ -5,5 +5,6 @@ const router = express.Router()
 
 router.post('/signin', signin)
 router.post('/signup', signup)
-router.get('/getUserInfo', isAdminAuthenticated ,getUserInfo)
+router.get('/getUserInfo',getUserInfo)
+
 export default router

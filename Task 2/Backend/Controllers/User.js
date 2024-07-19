@@ -25,21 +25,7 @@ export const signup = async(req,res,next) => {
             role: parsedBody.data.role || 'User'
         })
 
-        const payload = {
-            user: {
-                id: user._id,
-                role: user.role,
-                name: user.name
-            }
-        }
-
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 600000}, (err,token)=>{
-            if(err) throw err
-            res.json({
-                success: true,
-                token
-            })
-        })
+        generateToken(user,"User Registered Successfully!", 200, res)
     } catch (error) {
         console.error(error.message)
         res.status(500).send('Server Error')
@@ -72,6 +58,9 @@ export const signin = async(req,res,next) => {
 
 export const getUserInfo = async (req,res,next) => {
     const userId = req.user.id
+
+    if(!userId) next(new ErrorHandler("User is not loggedin", 400))
+
     const details = await User.findOne({_id: userId})
 
     return res.status(200).json({
