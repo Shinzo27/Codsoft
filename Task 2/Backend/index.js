@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { errorMiddleware } from './Middlewares/ErrorHandler.js'
 import userRouter from './Routes/User.js'
+import projectRouter from './Routes/Project.js'
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -25,6 +26,7 @@ app.use(express.json())
 
 
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/project', projectRouter)
 
 app.get('/', (req,res)=>{
     res.send('Hello world')
