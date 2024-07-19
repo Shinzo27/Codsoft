@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { errorMiddleware } from './Middlewares/ErrorHandler.js'
 import userRouter from './Routes/User.js'
 import projectRouter from './Routes/Project.js'
+import taskRouter from './Routes/Task.js'
 
 const app = express()
 const PORT = process.env.PORT || 8000
