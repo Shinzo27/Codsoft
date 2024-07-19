@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { z } from 'zod'
 import { signinParser, signupParser } from '../Config/Type.js'
+import { generateToken } from '../Utils/Auth.js'
 
 export const signup = async(req,res,next) => {
     const bodyParser = req.body
@@ -62,21 +63,7 @@ export const signin = async(req,res,next) => {
 
         if(!comparePassword) return next(new ErrorHandler("Password didn't matched!",400))
 
-        const payload = {
-            user: {
-                id: user._id,
-                role: user.role,
-                name: user.name
-            }
-        }
-
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 600000}, (err,token)=>{
-            if(err) throw err
-            res.json({
-                success: true,
-                token
-            })
-        })
+        generateToken(user,"User Loggedin Successfully!", 200, res)
     } catch (error) {
         console.log(error.message)
         res.status(500).send('Server Error')
