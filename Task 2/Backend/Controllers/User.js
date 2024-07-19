@@ -82,3 +82,13 @@ export const signin = async(req,res,next) => {
         res.status(500).send('Server Error')
     }
 }
+
+export const getUserInfo = async (req,res,next) => {
+    const userId = req.user.id
+    const details = await User.findOne({_id: userId})
+
+    return res.status(200).json({
+        success: true,
+        userDetails: details
+    })
+}
