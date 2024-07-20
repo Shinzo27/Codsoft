@@ -1,10 +1,9 @@
-import { Schema, model } from 'mongoose'; 
+import mongoose, { Schema, model } from 'mongoose'; 
 
 const userSchema = new Schema({
     name:{
         type:String,
         required:true,
-        index:true,
     },
     email:{
         type:String,
@@ -18,8 +17,18 @@ const userSchema = new Schema({
     role: {
         type: String,
         required: true,
-        enum: ['Admin','Developer','UI/UX Designer','Tester', 'Other']
-    }
+    },
+    projects: [{
+        projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Project"
+        },
+        role: {
+            type: String,
+            enum: ['Product Manager','Team Member'],
+            default: 'Team Member'
+        }
+    }]
 });
 
 const User = model('User', userSchema);

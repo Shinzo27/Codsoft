@@ -68,3 +68,13 @@ export const getUserInfo = async (req,res,next) => {
         userDetails: details
     })
 }
+
+export const logout = (req,res,next) => {
+    res.status(201).cookie("userToken", "", {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    }).json({
+        success: true,
+        message: "Logged Out Successfully!"
+    })
+}

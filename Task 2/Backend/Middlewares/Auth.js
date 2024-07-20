@@ -18,12 +18,20 @@ export const authenticateJwt = async(req,res,next) => {
     next()
 }
 
-export function authorizeRole(...roles) {
-  return (req,res,next)=>{
-    if(!roles.includes(req.user.role)){
-      return next(new ErrorHandler("User is not authorized!", 403))
-    }
-    next()
-  }
-}
+// export function authorizeRole(...roles) {
+//   return (req,res,next)=>{
+//     if(!roles.includes(req.user.role)){
+//       return next(new ErrorHandler("User is not authorized!", 403))
+//     }
+//     next()
+//   }
+// }
 
+export const projectRole = (requiredRole) => async (req,res,next) => {
+  const projectId = req.params.projectId || req.body.projectId
+  const userProject = req.user.projects.find(p => p.projectId.toString() === projectId)
+  if(!userProject || userProject.role !== requiredRole) {
+    return next(new ErrorHandler("Permission Denied!", 403))
+  }
+  next()
+}

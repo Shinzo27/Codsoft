@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 
 export const signupParser = z.object({
     name: z.string().min(1),
@@ -16,6 +16,9 @@ export const projectParser = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
     deadline: z.string(),
-    users: z.optional(),
+    users: z.object({
+        id: z.string(),
+        role: z.string()
+    }),
     tasks: z.optional()
 })

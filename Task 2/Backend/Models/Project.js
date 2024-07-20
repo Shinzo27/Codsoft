@@ -12,8 +12,14 @@ const projectSchema = new mongoose.Schema({
         type: String
     },
     users: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' 
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        role: {
+            type: String,
+            enum: ["Product Manager", "Team Member"]
+        }
     }],
     tasks: [{
         type: mongoose.Schema.Types.ObjectId,
