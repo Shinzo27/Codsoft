@@ -3,13 +3,14 @@ import { z } from "zod";
 import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
 import User from "../Models/User.js";
+import nodemailer from 'nodemailer'
+
 export const getProjects = async (req, res, next) => {
   res.send("helloooo");
 };
 
 export const createProject = async (req, res, next) => {
   const bodyParser = req.body;
-  console.log(req.body.deadline);
 
   const parsedBody = projectParser.safeParse(bodyParser);
 
@@ -61,9 +62,73 @@ export const addUser = async (req, res, next) => {
 
   if (parsedBody.error) return next(new ErrorHandler("Fill all the data properly!", 400));
 
-  console.log(parsedBody.data);
   //flowchart
-  return res.json({
-    message: "Hellooo",
-  });
+  const ifExists = await User.findOne({email: parsedBody.data.email})
+
+  if(ifExists) {
+    const userUpdate = await User.findOneAndUpdate({
+        email: parsedBody.data.email
+    }, {
+        $push: {
+            projects: {
+                projectId,
+                role: parsedBody.data.role
+            }
+        }
+    })
+    if(userUpdate) {
+        const projectTable = await Project.findOneAndUpdate({
+            _id: projectId
+        }, {
+            $push: {
+                users: {
+                    id: ifExists._id,
+                    role: parsedBody.data.role
+                }
+            }
+        }, { new: true })
+
+        if(projectTable) {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.USER_MAIL,
+                    pass: process.env.USER_PASS
+                }
+            })
+
+            const mailOption = {
+                from: process.env.USER_MAIL,
+                to: parsedBody.data.email,
+                subject: `Invitation to join project: ${projectTable.name}`,
+                text: `You have been invited to join the project: ${projectTable.name}. Please log in to accept the invitation`
+            }
+
+            try {
+                await transporter.sendMail(mailOption)
+                return res.status(200).json({
+                    success: true,
+                    message: "Invitation email sent to the user!"
+                })
+            } catch (error) {
+                next(new ErrorHandler("Error sending email" + error, 400))
+            }
+        } else {
+            next(new ErrorHandler("Something went wront!",400))
+        }
+    } else {
+        next(new ErrorHandler("Something went wront!",400))
+    }
+  } else {
+    const user = await User.create({
+        name: parsedBody.data.name,
+        email: parsedBody.data.email,
+        password: parsedBody.data.name,
+        role: 'Admin',
+        projects: {
+            projectId,
+            role: parsedBody.data.role
+        }
+    })
+  }
 };
