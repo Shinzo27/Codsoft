@@ -9,7 +9,7 @@ const projectSchema = new mongoose.Schema({
         type: String
     },
     deadline: {
-        type: Date
+        type: String
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
