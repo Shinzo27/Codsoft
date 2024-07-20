@@ -4,7 +4,7 @@ import { authenticateJwt, projectRole } from '../Middlewares/Auth.js'
 
 const router = express.Router()
 
-router.get('/getProjects', getProjects)
+router.get('/getProjects', authenticateJwt, getProjects)
 router.post('/createProject', authenticateJwt, createProject)
 router.post('/addUser/:projectId', authenticateJwt, projectRole('Product Manager'), addUser)
 

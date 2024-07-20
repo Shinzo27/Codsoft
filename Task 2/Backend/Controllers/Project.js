@@ -4,9 +4,21 @@ import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
 import User from "../Models/User.js";
 import nodemailer from 'nodemailer'
+import mongoose from "mongoose";
 
 export const getProjects = async (req, res, next) => {
-  res.send("helloooo");
+    const userId = req.user.id
+    const objectId = new mongoose.Types.ObjectId(userId)
+    
+    const project = await Project.find({
+        users: {
+            id: userId
+        }
+    })
+
+    res.status(200).json({
+        project
+    })
 };
 
 export const createProject = async (req, res, next) => {
@@ -62,7 +74,6 @@ export const addUser = async (req, res, next) => {
 
   if (parsedBody.error) return next(new ErrorHandler("Fill all the data properly!", 400));
 
-  //flowchart
   const ifExists = await User.findOne({email: parsedBody.data.email})
 
   if(ifExists) {
@@ -91,6 +102,9 @@ export const addUser = async (req, res, next) => {
         if(projectTable) {
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false,
                 auth: {
                     user: process.env.USER_MAIL,
                     pass: process.env.USER_PASS
@@ -100,8 +114,8 @@ export const addUser = async (req, res, next) => {
             const mailOption = {
                 from: process.env.USER_MAIL,
                 to: parsedBody.data.email,
-                subject: `Invitation to join project: ${projectTable.name}`,
-                text: `You have been invited to join the project: ${projectTable.name}. Please log in to accept the invitation`
+                subject: `Invitation to join project: ${projectTable.title}`,
+                html: `You have been invited to join the project: ${projectTable.title}. Please log in to accept the invitation`
             }
 
             try {
@@ -130,5 +144,50 @@ export const addUser = async (req, res, next) => {
             role: parsedBody.data.role
         }
     })
+    if(user) {
+        const projectTable = await Project.findOneAndUpdate({
+            _id: projectId
+        }, {
+            $push: {
+                users: {
+                    id: user._id,
+                    role: parsedBody.data.role
+                }
+            }
+        }, {new: true})
+        if(projectTable) {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                host: "smtp.gmail.com",
+                port: 587,
+                secure: false,
+                auth: {
+                    user: process.env.USER_MAIL,
+                    pass: process.env.USER_PASS
+                }
+            })
+
+            const mailOption = {
+                from: process.env.USER_MAIL,
+                to: parsedBody.data.email,
+                subject: `Invitation to join project: ${projectTable.title}`,
+                html: `You have been invited to join the project: ${projectTable.title}. Please log in to accept the invitation: <br><br>Here is your credentials to login in to the system: <br> <b>Email: </b>${parsedBody.data.email}<br><b>Password: </b>${parsedBody.data.name}`
+            }
+
+            try {
+                await transporter.sendMail(mailOption)
+                return res.status(200).json({
+                    success: true,
+                    message: "Invitation email sent to the user!"
+                })
+            } catch (error) {
+                next(new ErrorHandler("Error sending email" + error, 400))
+            }
+        } else {
+            next(new ErrorHandler("Something went wront!",400))
+        }
+    } else {
+        next(new ErrorHandler("Something went wront!",400))
+    }
   }
 };
