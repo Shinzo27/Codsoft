@@ -1,4 +1,4 @@
-import { projectParser } from "../Config/Type.js";
+import { newUserParser, projectParser } from "../Config/Type.js";
 import { z } from "zod";
 import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
@@ -54,15 +54,16 @@ export const createProject = async (req, res, next) => {
   }
 };
 
+export const addUser = async (req, res, next) => {
+  const projectId = req.params.projectId;
+  const bodyParser = req.body;
+  const parsedBody = newUserParser.safeParse(bodyParser);
 
-export const addUser = async(req,res,next) => {
-  const projectId = req.params.projectId
-  const userId = req.user.id
+  if (parsedBody.error) return next(new ErrorHandler("Fill all the data properly!", 400));
 
-  console.log(projectId);
-  console.log(userId);
-
+  console.log(parsedBody.data);
+  //flowchart
   return res.json({
-    message: "Hellooo"
-  })
-}
+    message: "Hellooo",
+  });
+};

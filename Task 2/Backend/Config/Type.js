@@ -22,3 +22,9 @@ export const projectParser = z.object({
     }),
     tasks: z.optional()
 })
+
+export const newUserParser = z.object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    role: z.string()
+})
