@@ -28,7 +28,7 @@ export const signup = async(req,res,next) => {
         generateToken(user,"User Registered Successfully!", 200, res)
     } catch (error) {
         console.error(error.message)
-        res.status(500).send('Server Error')
+        next(new ErrorHandler(error.message, 400))
     }
 }
 
@@ -52,7 +52,7 @@ export const signin = async(req,res,next) => {
         generateToken(user,"User Loggedin Successfully!", 200, res)
     } catch (error) {
         console.log(error.message)
-        res.status(500).send('Server Error')
+        next(new ErrorHandler(error.message, 400))
     }
 }
 
