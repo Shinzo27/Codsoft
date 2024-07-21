@@ -13,13 +13,13 @@ const taskSchema = new mongoose.Schema({
         enum: ['todo', 'in-progress', 'done'], default: 'todo'
     },
     deadline: {
-        type: Date
+        type: String
     },
     assignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    project: {
+    projectId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project'
     }

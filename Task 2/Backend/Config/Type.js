@@ -30,7 +30,16 @@ export const newUserParser = z.object({
 })
 
 export const editProjetParser = z.object({
-    title: z.string(),
-    description: z.string(),
-    deadline: z.string()
+    title: z.string().min(1),
+    description: z.string().min(1),
+    deadline: z.string().min(1)
+})
+
+export const taskParser = z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    status: z.string().min(1),
+    deadline: z.string().min(1),
+    assignedTo: z.string().min(1),
+    projectId: z.string().min(1),
 })
