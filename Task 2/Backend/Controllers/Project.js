@@ -4,20 +4,14 @@ import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
 import User from "../Models/User.js";
 import nodemailer from 'nodemailer'
-import mongoose from "mongoose";
 
 export const getProjects = async (req, res, next) => {
     const userId = req.user.id
-    const objectId = new mongoose.Types.ObjectId(userId)
-    
-    const project = await Project.find({
-        users: {
-            id: userId
-        }
-    })
+
+    const project = await User.findById(userId).populate('projects.projectId')
 
     res.status(200).json({
-        project
+        project: project.projects
     })
 };
 
@@ -191,3 +185,40 @@ export const addUser = async (req, res, next) => {
     }
   }
 };
+
+export const deleteUser = async (req,res,next) => {
+    const projectId = req.params.projectId
+    const userId = req.params.userId
+
+    const projectDetails = await Project.findById(projectId)
+
+    if(!projectDetails) return next(new ErrorHandler("Project not found!",400))
+    
+    const deleteUserFromProject = await Project.findOneAndUpdate({ _id: projectId}, {
+        $pull: {
+            users: {
+                id: userId
+            }
+        }
+    }, { new: true})
+
+    if(deleteUserFromProject) { 
+        const deleteProjectFromUser = await User.findOneAndUpdate({ _id: userId}, {
+            $pull: {
+                projects: {
+                    projectId
+                }
+            }
+        })
+        if(deleteProjectFromUser) {
+            res.status(200).json({
+                success: true,
+                message: "User deleted from the user!"
+            })
+        } else {
+            return next(new ErrorHandler("Something went wrong!", 400))
+        }
+    } else {
+        return next(new ErrorHandler("Something went wrong!", 400))
+    }
+}
