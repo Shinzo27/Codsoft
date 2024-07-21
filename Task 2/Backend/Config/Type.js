@@ -28,3 +28,9 @@ export const newUserParser = z.object({
     email: z.string().email(),
     role: z.string()
 })
+
+export const editProjetParser = z.object({
+    title: z.string(),
+    description: z.string(),
+    deadline: z.string()
+})

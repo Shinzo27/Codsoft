@@ -1,4 +1,4 @@
-import { newUserParser, projectParser } from "../Config/Type.js";
+import { editProjetParser, newUserParser, projectParser } from "../Config/Type.js";
 import { z } from "zod";
 import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
@@ -220,5 +220,28 @@ export const deleteUser = async (req,res,next) => {
         }
     } else {
         return next(new ErrorHandler("Something went wrong!", 400))
+    }
+}
+
+export const editProject = async (req,res,next) => {
+    const projectId = req.params.projectId
+    const bodyParser = req.body
+    const parsedBody = editProjetParser.safeParse(bodyParser)
+
+    if(parsedBody.error) return next(new ErrorHandler("Fill all the data properly!", 400))
+
+    const updateProject = await Project.findOneAndUpdate({_id: projectId}, {
+        title: parsedBody.data.title,
+        description: parsedBody.data.description,
+        deadline: parsedBody.data.deadline
+    })
+
+    if(updateProject) {
+        return res.status(200).json({
+            success: true,
+            message: "Project Updated Successfully!"
+        })
+    } else { 
+        return next(new ErrorHandler("Something went wrong!",400))
     }
 }
