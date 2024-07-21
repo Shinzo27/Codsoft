@@ -1,5 +1,6 @@
 import { taskParser } from "../Config/Type.js"
 import ErrorHandler from "../Middlewares/ErrorHandler.js"
+import Project from "../Models/Project.js"
 import Task from "../Models/Task.js"
 
 export const getTasks = async (req,res,next)=>{
@@ -31,10 +32,21 @@ export const addTasks = async(req,res,next) => {
     })
 
     if(createTask) {
-        return res.status(200).json({
-            success: true,
-            message: "Task assigned to the user!"
+        const addToProject = await Project.findOneAndUpdate({_id: parsedBody.data.projectId}, {
+            $push: {
+                tasks: {
+                    id: createTask._id
+                }
+            }
         })
+        if(addToProject) {
+            return res.status(200).json({
+                    success: true,
+                    message: "Task assigned to the user!"
+            })
+        } else {
+            next(new ErrorHandler("Something went wrong", 400))
+        }
     } else {
         next(new ErrorHandler("Something went wrong", 400))
     }

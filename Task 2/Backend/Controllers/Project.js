@@ -245,3 +245,30 @@ export const editProject = async (req,res,next) => {
         return next(new ErrorHandler("Something went wrong!",400))
     }
 }
+
+export const getProjectDetail = async(req,res,next) => {
+    const projectId = req.params.projectId
+
+    if(!projectId) return next(new ErrorHandler("Project Id not found",400))
+
+    const projectDetails = await Project.findOne({_id: projectId})
+
+    if(!projectDetails) return next(new ErrorHandler("Project Not found",400))
+
+    res.status(200).json({
+        projectDetails
+    })
+}
+
+export const getAllUsers = async(req,res,next) => {
+    const projectId = req.params.projectId
+    if(!projectId) return next(new ErrorHandler("Project Id not found!")) 
+
+    const allUsers = await Project.findById(projectId).populate('users.id')
+
+    if(!allUsers) return next(new ErrorHandler("Project not found!"))
+
+    return res.status(200).json({
+        users: allUsers.users
+    })
+}

@@ -22,8 +22,10 @@ const projectSchema = new mongoose.Schema({
         }
     }],
     tasks: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task'
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task'
+        }
     }]
 }, { timestamps: true})
 
