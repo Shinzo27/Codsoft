@@ -31,7 +31,8 @@ const projectSchema = new mongoose.Schema({
         }
     }],
     status: {
-        type: String
+        type: String,
+        enum: ["Todo", "In-progress", "Finished"]
     }
 }, { timestamps: true})
 

@@ -44,7 +44,7 @@ const Projects = () => {
                         {project.Description}
                     </div>
                 </div>
-                <div>
+                <div className="hidden lg:block md:block">
                     <Button title={"View Project"} bgColor={"Black"} fontColor={"White"}/>
                 </div>
             </div>
@@ -59,6 +59,9 @@ const Projects = () => {
               </div>
               <div className="mt-3 p-1 rounded-md w-fit bg-gray-100">
                 {project.Status}
+              </div>
+              <div className="pt-3 lg:hidden md:hidden">
+                <Button title={"View Project"} bgColor={"Black"} fontColor={"White"}/>
               </div>
             </div>
           </div>
