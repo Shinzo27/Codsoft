@@ -11,6 +11,9 @@ const projectSchema = new mongoose.Schema({
     deadline: {
         type: String
     },
+    startDate: {
+        type: String
+    },
     users: [{
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +29,10 @@ const projectSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Task'
         }
-    }]
+    }],
+    status: {
+        type: String
+    }
 }, { timestamps: true})
 
 const Project = mongoose.model('Project', projectSchema)

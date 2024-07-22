@@ -34,8 +34,10 @@ export const createProject = async (req, res, next) => {
       role: parsedBody.data.users.role,
     },
     tasks: parsedBody.data.tasks,
+    status: parsedBody.data.status,
+    startDate: parsedBody.data.startDate
   });
-
+  
   if (newProject) {
     const updateUser = await User.findOneAndUpdate(
       {

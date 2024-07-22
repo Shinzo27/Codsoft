@@ -20,7 +20,9 @@ export const projectParser = z.object({
         id: z.string(),
         role: z.string()
     }),
-    tasks: z.optional()
+    tasks: z.optional(),
+    status: z.string(),
+    startDate: z.string()
 })
 
 export const newUserParser = z.object({
