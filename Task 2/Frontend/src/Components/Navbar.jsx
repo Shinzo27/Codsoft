@@ -9,13 +9,13 @@ const Navbar = () => {
         </div>
         <div className='hidden sm:block lg:flex justify-center items-center gap-8'>
             <div>
-                <Button title={"Login"}/>
+                <Button title={"Login"} bgColor={"White"} fontColor={"Black"}/>
             </div>
             <div>
                 <h2>My name</h2>
             </div>
             <div>
-                <Button title={"Logout"}/>
+                <Button title={"Login"} bgColor={"White"} fontColor={"Black"}/>
             </div>
         </div>
     </div>
