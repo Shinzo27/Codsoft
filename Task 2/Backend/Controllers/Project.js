@@ -4,6 +4,7 @@ import { ErrorHandler } from "../Middlewares/ErrorHandler.js";
 import Project from "../Models/Project.js";
 import User from "../Models/User.js";
 import nodemailer from 'nodemailer'
+import mongoose from "mongoose";
 
 export const getProjects = async (req, res, next) => {
     const userId = req.user.id
@@ -250,10 +251,9 @@ export const editProject = async (req,res,next) => {
 
 export const getProjectDetail = async(req,res,next) => {
     const projectId = req.params.projectId
-
     if(!projectId) return next(new ErrorHandler("Project Id not found",400))
 
-    const projectDetails = await Project.findOne({_id: projectId})
+    const projectDetails = await Project.find({_id: projectId}).populate('tasks.id users.id')
 
     if(!projectDetails) return next(new ErrorHandler("Project Not found",400))
 

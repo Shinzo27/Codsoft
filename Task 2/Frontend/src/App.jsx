@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useContext, useEffect } from "react"
 import { Context } from "./main"
 import axios from "axios"
+import ProjectDetail from "./Pages/ProjectDetail"
 
 function App() {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context)
@@ -41,6 +42,7 @@ function App() {
           <Route element={<Hero/>} path="/"/>
           <Route element={<Signup/>} path="/signup"/>
           <Route element={<Signin/>} path="/signin"/>
+          <Route element={<ProjectDetail/>} path="/projectDetail/:id"/>
         </Routes>
        <Footer/>
         <ToastContainer position="top-center"/>

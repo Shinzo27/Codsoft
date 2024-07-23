@@ -1,6 +1,16 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const ProjectInfo = () => {
+  const [tasks, setTasks] = useState([])
+  const slicedTask = tasks.slice(0,3)
+  useEffect(()=>{
+    const getTasks = async() => {
+      const { data } = await axios.get('http://localhost:8000/api/v1/task/getTasksOfUser', {withCredentials: true})
+      setTasks(data.tasks)
+    }
+    getTasks()
+  }, [])
   return (
     <>
       <div>
@@ -13,36 +23,25 @@ const ProjectInfo = () => {
         <div className="flex-1 bg-white p-6 rounded-xl shadow-sm">
           <h2 className="text-2xl font-bold mb-2">Tasks</h2>
           <p className="text-gray-400 mb-4">View and manage tasks</p>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold">Finalize project proposal</h3>
-                <p className="text-gray-500">
-                  Create final project proposal for client
-                </p>
+          {
+            slicedTask.map((task, index)=>(
+              <div className="space-y-4" key={index}>
+                <div className="flex justify-between items-center pt-3">
+                  <div>
+                    <h3 className="font-semibold">{task.title}</h3>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm bg-gray-100 text-gray-500 px-2 py-1 rounded-lg">
+                      {task.status}
+                    </span>
+                    <span className="ml-4">{task.deadline}</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center">
-                <span className="text-sm bg-gray-100 text-gray-500 px-2 py-1 rounded-lg">
-                  In Progress
-                </span>
-                <span className="ml-4">June 30, 2023</span>
-              </div>
-            </div>
-          </div>
+            ))
+          }
+          
         </div>
-
-        {/* Calendar Section */}
-        {/* <div className="flex-1 bg-white p-6 rounded-xl shadow-sm"> */}
-        {/* <h2 className="text-2xl font-bold mb-2">Users</h2> */}
-        {/* <p className="text-gray-400 mb-4"></p> */}
-        {/* <div className="calendar"> */}
-        {/* You can use a calendar component here */}
-        {/* Example: react-calendar */}
-
-        {/* </div> */}
-        {/* </div> */}
-
-        {/* Project Overview Section */}
         <div className="flex-1 bg-white p-6 rounded-xl shadow-sm">
           <h2 className="text-2xl font-bold mb-2">Project List</h2>
           <p className="text-gray-400 mb-4">current projects</p>

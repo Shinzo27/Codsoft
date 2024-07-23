@@ -1,47 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Shared/Button";
+import axios from "axios";
 
 const Projects = () => {
-  const projectDetails = [
-    {
-      ProjectName: "Dsms",
-      Description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id voluptas vitae nisi exercitationem architecto dignissimos.",
-      StartDate: "22-06-24",
-      EndDate: "25-06-24",
-      Status: "In-progress"
-    },
-    {
-      ProjectName: "Project Management Tool",
-      Description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id voluptas vitae nisi exercitationem architecto dignissimos.",
-      StartDate: "22-06-24",
-      EndDate: "25-06-24",
-      Status: "Todo"
-    },
-    {
-      ProjectName: "Chat-App",
-      Description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id voluptas vitae nisi exercitationem architecto dignissimos.",
-      StartDate: "22-06-24",
-      EndDate: "25-06-24",
-      Status: "Finished"
-    },
-  ];
+  const [ projects, setProjects ] = useState([])
+
+  useEffect(()=>{
+    const getProjects = async() => {
+      const { data } = await axios.get('http://localhost:8000/api/v1/project/getProjects', {withCredentials: true})
+      setProjects(data.project)
+      console.log(data.project)
+    }
+    getProjects()
+  }, [])
+
   return (
     <>
       <div className="pl-8 font-bold text-2xl">Projects</div>
       <div className="p-6 flex flex-col justify-center items-center flex-wrap gap-6">
-        {projectDetails.map((project, index) => (
+        {projects.map((project, index) => (
           <div
             className="w-full p-5 bg-white shadow-sm border-opacity-10 border border-black rounded-lg flex flex-col justify-between gap-5"
             key={index}
           >
             <div className="flex justify-between">
                 <div>
-                    <div className="font-bold text-2xl">{ project.ProjectName}</div>
+                    <div className="font-bold text-2xl">{ project.projectId.title}</div>
                     <div className="font-medium text-md text-gray-400 ">
-                        {project.Description}
+                        {project.projectId.description}
                     </div>
                 </div>
                 <div className="hidden lg:block md:block">
@@ -51,14 +37,17 @@ const Projects = () => {
             <div>
               <div className="flex justify-between items-center">
                 <div>Start Date</div>
-                <div>{project.StartDate}</div>
+                <div>{project.projectId.startDate}</div>
               </div>
               <div className="flex justify-between items-center pt-4">
-                <div>Start Date</div>
-                <div>{project.EndDate}</div>
+                <div>End Date</div>
+                <div>{project.projectId.deadline}</div>
               </div>
               <div className="mt-3 p-1 rounded-md w-fit bg-gray-100">
                 {project.Status}
+              </div>
+              <div className="mt-3 p-1 rounded-md w-fit bg-gray-100">
+                {project.role}
               </div>
               <div className="pt-3 lg:hidden md:hidden">
                 <Button title={"View Project"} bgColor={"Black"} fontColor={"White"}/>

@@ -8,10 +8,20 @@ export const getTasks = async (req,res,next)=>{
 
     const tasks = await Task.find({
         projectId: projectId
-    })
+    }).populate('assignedTo')
 
     return res.status(200).json({
         tasks
+    })
+}
+
+export const getTasksOfUser = async(req,res,next)=>{
+    const tasks = await Task.find({
+        assignedTo: req.user.id
+    })
+
+    return res.status(200).json({
+        tasks: tasks
     })
 }
 
