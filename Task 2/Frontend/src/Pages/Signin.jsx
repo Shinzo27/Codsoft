@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Context } from "../main";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
@@ -31,6 +31,8 @@ const Signin = () => {
       toast.error(error.response.data.message);
     }
   };
+
+  if(isAuthenticated) return <Navigate to={'/'}/>
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">

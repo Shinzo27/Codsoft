@@ -2,14 +2,17 @@ import React, { useContext, useState } from "react";
 import Button from "./Shared/Button";
 import { TiThMenuOutline } from "react-icons/ti";
 import { Context } from '../main'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  const { isAuthenticated, user } = useContext(Context)
+  const { isAuthenticated, user, setIsAuthenticated, setUser } = useContext(Context)
+  const navigateTo = useNavigate()
 
   const Navbar = [
     isAuthenticated ?
@@ -24,9 +27,19 @@ const Navbar = () => {
     }
   ]
   const handleLogout = async() => {
-
+    try {
+      const { data } = await axios.get('http://localhost:8000/api/v1/user/logout', {withCredentials: true})
+      if(data.success) {
+        setIsAuthenticated(false)
+        setUser({})
+        toast.success("User Logged Out")
+        navigateTo('/signin')
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
-  
+
   return (
     <div>
       <div className="w-full h-16 bg-black text-white font-bold flex justify-around items-center px-4">
@@ -37,7 +50,7 @@ const Navbar = () => {
                 isAuthenticated ? (
                   <div className="flex items-center justify-center gap-4">
                     <Link type="button" className="p-2 rounded-lg bg-white text-black">{ user.name }</Link>
-                    <Link type="button" className="p-2 rounded-lg bg-white text-black" onClick={handleLogout}>Logout</Link>
+                    <button onClick={handleLogout} className="p-2 rounded-lg bg-white text-black">Logout</button>
                   </div>
                 ) : (
                   <Link type="button" className="p-2 rounded-lg bg-white text-black">Login</Link>
