@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../main";
+import { Link } from "react-router-dom";
 
 const ProjectAbout = ({ projectId }) => {
   const { isAuthenticated, user, setIsAuthenticated, setUser } =
@@ -44,10 +45,14 @@ const ProjectAbout = ({ projectId }) => {
             role === 'Product Manager' ? (
               <>
               <button className="bg-black text-white px-4 py-2 rounded-lg">
-                Add User
+                <Link to={`/addUser/${projectId}`}>
+                  Add User
+                </Link>
               </button>
               <button className="bg-black text-white px-4 py-2 rounded-lg">
+                <Link to={`/addTask/${projectId}`}>
                 Add Task
+                </Link>
               </button>
               </>
             ) : null

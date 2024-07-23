@@ -51,7 +51,7 @@ const Signin = () => {
             </a>
           </p>
         </div>
-        <form className="space-y-6" onSubmit={handleLogin}>
+        <form className="space-y-6" method="POST" onSubmit={handleLogin}>
           <div>
             <label
               htmlFor="email"

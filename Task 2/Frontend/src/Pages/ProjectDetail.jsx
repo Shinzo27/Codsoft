@@ -9,6 +9,7 @@ const ProjectDetail = () => {
 
   return (
     <div className="pt-7 min-h-screen">
+      
       <div className="flex flex-wrap justify-center items-center -mx-4">
         <div className="w-full lg:w-2/3 px-4 mb-4">
           <ProjectAbout projectId={id}/>

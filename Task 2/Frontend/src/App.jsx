@@ -10,6 +10,8 @@ import { useContext, useEffect } from "react"
 import { Context } from "./main"
 import axios from "axios"
 import ProjectDetail from "./Pages/ProjectDetail"
+import AddUser from "./Pages/AddUser"
+import AddTask from "./Pages/AddTask"
 
 function App() {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context)
@@ -43,6 +45,8 @@ function App() {
           <Route element={<Signup/>} path="/signup"/>
           <Route element={<Signin/>} path="/signin"/>
           <Route element={<ProjectDetail/>} path="/projectDetail/:id"/>
+          <Route element={<AddUser/>} path="/addUser/:id"/>
+          <Route element={<AddTask/>} path="/addTask/:id"/>
         </Routes>
        <Footer/>
         <ToastContainer position="top-center"/>
