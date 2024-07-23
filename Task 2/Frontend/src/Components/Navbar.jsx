@@ -14,18 +14,6 @@ const Navbar = () => {
   const { isAuthenticated, user, setIsAuthenticated, setUser } = useContext(Context)
   const navigateTo = useNavigate()
 
-  const Navbar = [
-    isAuthenticated ?
-    {
-      id:1,
-      title: user.name,
-      link: "/profile"
-    } : {
-      id:1,
-      title: "Login",
-      link: "/signin"
-    }
-  ]
   const handleLogout = async() => {
     try {
       const { data } = await axios.get('http://localhost:8000/api/v1/user/logout', {withCredentials: true})
@@ -43,7 +31,7 @@ const Navbar = () => {
   return (
     <div>
       <div className="w-full h-16 bg-black text-white font-bold flex justify-around items-center px-4">
-        <div className="md:text-2xl text-xl">Project Management Tool</div>
+        <div className="md:text-2xl text-xl"><Link to={'/'}>Project Management Tool</Link></div>
         <div className="sm:flex hidden gap-4">
             <div className="flex items-center justify-center gap-4">
               { 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "./Shared/Button";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Projects = () => {
   const [ projects, setProjects ] = useState([])
@@ -31,7 +32,7 @@ const Projects = () => {
                     </div>
                 </div>
                 <div className="hidden lg:block md:block">
-                    <Button title={"View Project"} bgColor={"Black"} fontColor={"White"}/>
+                    <button className="p-2 rounded-lg text-white bg-black"><Link to={`/projectDetail/${project.projectId._id}`}>View Project</Link></button>
                 </div>
             </div>
             <div>

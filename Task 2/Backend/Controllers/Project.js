@@ -274,3 +274,23 @@ export const getAllUsers = async(req,res,next) => {
         users: allUsers.users
     })
 }
+
+export const getUsersRole = async(req,res,next) => {
+    try {
+        const userId = req.user.id; // User ID from authentication middleware
+        const project = await Project.findOne({ 'users.id': userId }, { 'users.$': 1 }); // Assuming 'members' is an array in your project schema
+    
+        if (!project) {
+          return res.status(404).json({ message: 'Project not found' });
+        }
+    
+        const member = project.users.find(member => member.id.toString() === userId);
+        if (!member) {
+          return res.status(404).json({ message: 'User not found in project' });
+        }
+    
+        res.json({ role: member.role });
+      } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+      }
+} 

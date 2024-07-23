@@ -6,7 +6,6 @@ const TeamMembers = ({projectId}) => {
     const fetchMembers = async() => {
       const { data } = await axios.get(`http://localhost:8000/api/v1/project/getAllUsers/${projectId}`, { withCredentials: true })
       setTeamMembers(data.users)
-      console.log(data);
     }
     fetchMembers()
   }, [])

@@ -8,7 +8,6 @@ const Tasks = ({projectId}) => {
     const getTasks = async() => {
       const { data } = await axios.get(`http://localhost:8000/api/v1/task/getTasks/${projectId}`, {withCredentials: true})
       setTasks(data.tasks)
-      console.log(data.tasks);
     }
     getTasks()
   },[])

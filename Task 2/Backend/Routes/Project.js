@@ -1,5 +1,5 @@
 import express from 'express'
-import { addUser, createProject, deleteUser, editProject, getAllUsers, getProjectDetail, getProjects } from '../Controllers/Project.js'
+import { addUser, createProject, deleteUser, editProject, getAllUsers, getProjectDetail, getProjects, getUsersRole } from '../Controllers/Project.js'
 import { authenticateJwt, projectRole } from '../Middlewares/Auth.js'
 
 const router = express.Router()
@@ -11,5 +11,6 @@ router.post('/addUser/:projectId', authenticateJwt, projectRole('Product Manager
 router.delete('/deleteUser/:projectId/users/:userId', authenticateJwt, projectRole('Product Manager'), deleteUser)
 router.put('/editProject/:projectId', authenticateJwt, projectRole('Product Manager'), editProject)
 router.get('/getAllUsers/:projectId', authenticateJwt, getAllUsers)
+router.get('/getUsersRole/:projectId', authenticateJwt, getUsersRole)
 
 export default router
