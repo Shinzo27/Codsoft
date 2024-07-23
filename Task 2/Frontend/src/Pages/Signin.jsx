@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Signin = () => {
   const [ email, setEmail ] = useState("")
   const [ password, setPassword ] = useState("")
 
-  function loginHandler(){
+  const navigateTo = useNavigate()
+
+  const handleLogin = async(e) => {
+    e.preventDefault()
     try {
-      const { data } = axios.post('', {email, password}, {withCredentials: true})
-      
+      const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {email, password}, {withCredentials: true})
+      if(data.success) {
+        navigateTo('/')
+        toast.success("User loggedin!")
+      }
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.error)
     }
   }
 
@@ -32,7 +39,7 @@ const Signin = () => {
             </a>
           </p>
         </div>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
             <label
               htmlFor="email"

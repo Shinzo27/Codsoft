@@ -6,11 +6,9 @@ import Signup from "./Pages/Signup"
 import Signin from "./Pages/Signin"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { useContext } from "react"
-import { Context } from "../../../Task 1/Frontend/src/main"
+
 
 function App() {
-  const {isAuthenticated, setIsAuthenticated, user, setUser} = useContext(Context)
 
   return (
     <>

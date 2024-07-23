@@ -78,3 +78,10 @@ export const logout = (req,res,next) => {
         message: "Logged Out Successfully!"
     })
 }
+
+export const userDetails = (req,res,next) => {
+    const user = req.user
+    res.status(200).json({
+        user
+    })
+}
