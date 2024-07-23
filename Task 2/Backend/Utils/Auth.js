@@ -17,7 +17,8 @@ export function generateToken(user,message,statusCode,res) {
      }).status(statusCode).json({
         success: true,
         message,
-        token
+        token,
+        user: payload
      })
 }
 

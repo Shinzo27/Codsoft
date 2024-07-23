@@ -1,26 +1,36 @@
-import React, { useState } from 'react'
-import { toast } from 'react-toastify'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useContext } from "react";
+import { Context } from "../main";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
-  const [ email, setEmail ] = useState("")
-  const [ password, setPassword ] = useState("")
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
-  const navigateTo = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigateTo = useNavigate();
 
-  const handleLogin = async(e) => {
-    e.preventDefault()
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:8000/api/v1/user/signin', {email, password}, {withCredentials: true})
-      if(data.success) {
-        navigateTo('/')
-        toast.success("User loggedin!")
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/user/signin",
+        { email, password },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (data.success) {
+        setIsAuthenticated(true)
+        navigateTo("/");
+        toast.success("User loggedin!");
       }
     } catch (error) {
-      toast.error(error.response.data.error)
+      toast.error(error.response.data.message);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -53,7 +63,7 @@ const Signin = () => {
                 type="email"
                 autoComplete="email"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
@@ -73,7 +83,7 @@ const Signin = () => {
                 type="password"
                 required
                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
@@ -88,16 +98,14 @@ const Signin = () => {
           </div>
           <div className="text-center text-sm text-gray-600">
             Not logged in?{" "}
-            <button
-              className="font-medium text-gray-600 hover:text-indigo-500"
-            >
+            <button className="font-medium text-gray-600 hover:text-indigo-500">
               Signup
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Signin
+export default Signin;
