@@ -26,7 +26,7 @@ const UserDetails = () => {
     const {
       data: { order },
     } = await axios.post(
-      "http://localhost:8000/api/v1/checkout/createOrder",
+      "https://grocery-backend-wyyo.onrender.com/api/v1/checkout/createOrder",
       { amount: total },
       { withCredentials: true }
     );
@@ -74,12 +74,12 @@ const UserDetails = () => {
 
       try {
         const verifyResponse = await axios.post(
-          "http://localhost:8000/api/v1/checkout/verifyPayment",
+          "https://grocery-backend-wyyo.onrender.com/api/v1/checkout/verifyPayment",
           paymentData
         );
         const verifyData = verifyResponse.data;
         if (verifyData.success) {
-          const res = await axios.post("http://localhost:8000/api/v1/checkout/complete", { userDetails, razorpay_order_id: paymentData.razorpay_order_id, total }, {withCredentials: true});
+          const res = await axios.post("https://grocery-backend-wyyo.onrender.com/api/v1/checkout/complete", { userDetails, razorpay_order_id: paymentData.razorpay_order_id, total }, {withCredentials: true});
           console.log(res);
           if(res.data.success){
              toast.success("Your order is placed!")

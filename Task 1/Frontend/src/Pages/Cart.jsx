@@ -17,7 +17,7 @@ const Cart = () => {
 
   const getCartItems = async () => {
     const { data } = await axios.get(
-      "http://localhost:8000/api/v1/cart/display",
+      "https://grocery-backend-wyyo.onrender.com/api/v1/cart/display",
       { withCredentials: true }
     );
     if (data) {

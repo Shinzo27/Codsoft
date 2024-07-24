@@ -17,7 +17,10 @@ const Projects = () => {
 
   return (
     <>
-      <div className="pl-8 font-bold text-2xl">Projects</div>
+      <div className="pl-8 flex justify-between items-center">
+        <div className="text-2xl font-bold ">Projects</div>
+        <div className="p-2 rounded-lg text-white bg-black mr-6">Add Project</div>
+      </div>
       <div className="p-6 flex flex-col justify-center items-center flex-wrap gap-6">
         {projects.map((project, index) => (
           <div

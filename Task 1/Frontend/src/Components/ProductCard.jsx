@@ -11,7 +11,7 @@ const ProductCard = ({ id, img, ProductName, ProductPrice}) => {
   async function addToCart(userId, productId, quantity){
     if(isAuthenticated){
       try {
-        const { data } = await axios.post(`http://localhost:8000/api/v1/cart/addToCart/${productId}`, {quantity}, {withCredentials: true})
+        const { data } = await axios.post(`https://grocery-backend-wyyo.onrender.com/api/v1/cart/addToCart/${productId}`, {quantity}, {withCredentials: true})
         toast.success(data.message)
       } catch (error) {
         toast.error(error.response.data.message);

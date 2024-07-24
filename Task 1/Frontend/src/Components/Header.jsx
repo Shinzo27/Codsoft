@@ -44,7 +44,7 @@ const Header = () => {
   const navigateTo = useNavigate();
   const logoutHandler = async () => {
     await axios
-      .get("http://localhost:8000/api/v1/user/customer/logout", {
+      .get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {
         withCredentials: true,
       })
       .then((res) => {

@@ -15,8 +15,8 @@ const Product = () => {
   const fetchProducts = async (query) => {
     try {
       const response = query
-      ? await axios.get(`http://localhost:8000/api/v1/product/filterProduct?filter=${searchQuery}`)
-      : await axios.get('http://localhost:8000/api/v1/product/categoryProduct');
+      ? await axios.get(`https://grocery-backend-wyyo.onrender.com/api/v1/product/filterProduct?filter=${searchQuery}`)
+      : await axios.get('https://grocery-backend-wyyo.onrender.com/api/v1/product/categoryProduct');
       setProducts(response.data.product);
     } catch (err) {
       console.error(err);
