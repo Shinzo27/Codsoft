@@ -93,9 +93,9 @@ const Header = () => {
                     </Link>
                   </button>
                   <button>
-                    <Link to="/logout" onClick={()=>logoutHandler}>
+                    <button onClick={()=>logoutHandler}>
                       <LuLogOut className="hover:text-orange-500"/>
-                    </Link>
+                    </button>
                   </button>
                 </div>
               ) : null}
