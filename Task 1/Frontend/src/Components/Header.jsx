@@ -49,8 +49,9 @@ const Header = () => {
         if(data.success) {
           toast.success(data.message);
           setIsAuthenticated(false);
-          setUser("");
+          setUser({});
           window.location.reload()
+          navigateTo('/')
         } else {
           console.log("Something went wrong");
         }
