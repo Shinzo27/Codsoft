@@ -43,18 +43,22 @@ const Header = () => {
   ];
   const navigateTo = useNavigate();
 
+  // const logoutHandler = async () => {
+  //   try {
+  //       const { data } = await axios.get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {withCredentials: true,})
+  //       if(data.success) {
+  //         toast.success(res.data.message);
+  //         setIsAuthenticated(false);
+  //         setUser("");
+  //         navigateTo("/");
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //   }
+  // };
+
   const logoutHandler = async () => {
-    try {
-        const { data } = await axios.get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {withCredentials: true,})
-        if(data.success) {
-          toast.success(res.data.message);
-          setIsAuthenticated(false);
-          setUser("");
-          navigateTo("/");
-        }
-      } catch (error) {
-        console.log(error);
-    }
+    console.log("logout clicked");
   };
 
   return (
