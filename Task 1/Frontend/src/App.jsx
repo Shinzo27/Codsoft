@@ -28,15 +28,16 @@ function App() {
             withCredentials: true,
           }
         );
+        console.log(response.data);
         setIsAuthenticated(true);
         setUser(response.data.user);
       } catch (error) {
-        setIsAuthenticated(false);
-        setUser({});
+        console.log(error)
       }
     };
     fetchUser()
   }, [isAuthenticated]);
+
   return (
     <BrowserRouter>
       <Header/>

@@ -42,6 +42,7 @@ const Header = () => {
         },
   ];
   const navigateTo = useNavigate();
+
   const logoutHandler = async () => {
     await axios
       .get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {
@@ -92,7 +93,7 @@ const Header = () => {
                     </Link>
                   </button>
                   <button>
-                    <Link to="/logout" onClick={logoutHandler}>
+                    <Link to="/logout" onClick={()=>logoutHandler}>
                       <LuLogOut className="hover:text-orange-500"/>
                     </Link>
                   </button>
