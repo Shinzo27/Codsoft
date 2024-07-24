@@ -44,19 +44,17 @@ const Header = () => {
   const navigateTo = useNavigate();
 
   const logoutHandler = async () => {
-    await axios
-      .get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-        setUser("");
-        navigateTo("/");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+        const { data } = await axios.get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {withCredentials: true,})
+        if(data.success) {
+          toast.success(res.data.message);
+          setIsAuthenticated(false);
+          setUser("");
+          navigateTo("/");
+        }
+      } catch (error) {
+        console.log(error);
+    }
   };
 
   return (
@@ -92,7 +90,7 @@ const Header = () => {
                       <IoCart className="hover:text-orange-500" />
                     </Link>
                   </button>
-                  <button onClick={()=>logoutHandler}>
+                  <button onClick={logoutHandler}>
                       <LuLogOut className="hover:text-orange-500"/>
                   </button>
                 </div>
