@@ -3,11 +3,12 @@ import jwt from 'jsonwebtoken'
 export const generateToken = (user, message, stautsCode, res) => {
     const token = user.generateWebToken();
     const cookieName = user.role === "Admin" ? "AdminToken" : "CustomerToken"; 
-    
     return res
       .status(stautsCode)
       .cookie(cookieName, token, {
           httpOnly: true,
+          secure: true,
+          sameSite: 'None'
       })
       .json({
         success: true,
