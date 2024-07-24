@@ -40,7 +40,6 @@ const AddTask = () => {
         { withCredentials: true }
       );
       setUsers(data.users);
-      console.log(data.users);
     };
     checkRole();
     getUsers();

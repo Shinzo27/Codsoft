@@ -5,7 +5,6 @@ import { ErrorHandler } from "../Middleware/ErrorHandler.js";
 
 export const userSignin = async (req, res, next) => {
   const BodyParser = req.body;
-  console.log(BodyParser);
   const parsedPayload = SignIn.safeParse(BodyParser);
 
   if (!parsedPayload.success) {

@@ -23,9 +23,7 @@ const Signin = () => {
           }
         );
         setIsAuthenticated(true);
-        console.log(isAuthenticated);
         setUser(response.data.user);
-        console.log(user);
       } catch (error) {
         console.log(error);
       }

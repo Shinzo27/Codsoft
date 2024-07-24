@@ -10,7 +10,6 @@ const Projects = () => {
     const getProjects = async() => {
       const { data } = await axios.get('https://pmt-backend.onrender.com/api/v1/project/getProjects', {withCredentials: true})
       setProjects(data.project)
-      console.log(data.project)
     }
     getProjects()
   }, [])

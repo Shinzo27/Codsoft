@@ -55,7 +55,6 @@ const UserDetails = () => {
         color: "#5e30eb",
       },
     };
-    console.log(window);
     const razor = new window.Razorpay(options);
     razor.on("payment.error", function (response) {
       toast.error("Payment Failed");
@@ -80,7 +79,6 @@ const UserDetails = () => {
         const verifyData = verifyResponse.data;
         if (verifyData.success) {
           const res = await axios.post("https://grocery-backend-wyyo.onrender.com/api/v1/checkout/complete", { userDetails, razorpay_order_id: paymentData.razorpay_order_id, total }, {withCredentials: true});
-          console.log(res);
           if(res.data.success){
              toast.success("Your order is placed!")
              navigateTo('/paymentSuccess')
@@ -93,8 +91,6 @@ const UserDetails = () => {
       }
     };
 
-  // if(!isAuthenticated) return <Navigate to={'/login'}/>
-  console.log(total);
   if(total === "") return <Navigate to={'/cart'}/>
   return (
     <>
