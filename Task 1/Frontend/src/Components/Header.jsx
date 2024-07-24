@@ -47,10 +47,12 @@ const Header = () => {
     try {
         const { data } = await axios.get("https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/logout", {withCredentials: true,})
         if(data.success) {
-          toast.success(res.data.message);
+          toast.success(data.message);
           setIsAuthenticated(false);
           setUser("");
           window.location.reload()
+        } else {
+          console.log("Something went wrong");
         }
       } catch (error) {
         console.log(error);
