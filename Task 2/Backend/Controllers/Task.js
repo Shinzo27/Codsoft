@@ -60,6 +60,7 @@ export const addTasks = async(req,res,next) => {
     } else {
         next(new ErrorHandler("Something went wrong", 400))
     }
+    next(new ErrorHandler("Something went wrong", 400))
 }
 
 export const updateTaskStatus = async(req,res,next) => {

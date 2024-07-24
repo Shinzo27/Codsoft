@@ -7,7 +7,7 @@ import { Context } from '../main'
 
 const Hero = () => {
   const {isAuthenticated} = useContext(Context)
-  
+
   if(!isAuthenticated) return <Navigate to={'/signin'}/>
 
   return (

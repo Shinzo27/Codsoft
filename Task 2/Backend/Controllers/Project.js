@@ -9,6 +9,8 @@ import mongoose from "mongoose";
 export const getProjects = async (req, res, next) => {
     const userId = req.user.id
 
+    if(!userId) return next(new ErrorHandler("User not authenticated!", 400))
+
     const project = await User.findById(userId).populate('projects.projectId')
 
     res.status(200).json({
@@ -35,7 +37,7 @@ export const createProject = async (req, res, next) => {
       role: parsedBody.data.users.role,
     },
     tasks: parsedBody.data.tasks,
-    status: parsedBody.data.status,
+    status: 'Todo',
     startDate: parsedBody.data.startDate
   });
   
@@ -45,11 +47,14 @@ export const createProject = async (req, res, next) => {
         _id: req.user.id,
       },
       {
-        projects: {
-          projectId: newProject._id,
-          role: "Product Manager",
-        },
-      }
+        $push: {
+            projects: {
+              projectId: newProject._id,
+              role: "Product Manager",
+            },
+        }
+      },
+      {new: true}
     );
     if (updateUser) {
       return res.status(200).json({

@@ -12,6 +12,7 @@ import axios from "axios"
 import ProjectDetail from "./Pages/ProjectDetail"
 import AddUser from "./Pages/AddUser"
 import AddTask from "./Pages/AddTask"
+import AddProject from "./Pages/AddProject"
 
 function App() {
   const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context)
@@ -47,6 +48,7 @@ function App() {
           <Route element={<ProjectDetail/>} path="/projectDetail/:id"/>
           <Route element={<AddUser/>} path="/addUser/:id"/>
           <Route element={<AddTask/>} path="/addTask/:id"/>
+          <Route element={<AddProject/>} path="/addProject"/>
         </Routes>
        <Footer/>
         <ToastContainer position="top-center"/>

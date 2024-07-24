@@ -97,13 +97,7 @@ const AddUser = () => {
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign In
-            </button>
-          </div>
-          <div className="text-center text-sm text-gray-600">
-            Not logged in?{" "}
-            <button className="font-medium text-gray-600 hover:text-indigo-500">
-              Signup
+              Add User
             </button>
           </div>
         </form>

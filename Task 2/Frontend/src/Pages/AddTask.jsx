@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 const AddTask = () => {
   const { id } = useParams();
   const navigateTo = useNavigate();
-  const [users, setUsers ] = useState([])
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [status, setStatus] = useState("")
-  const [ deadline, setDeadline ] = useState("")
-  const [ assignedTo, setAssignedTo ] = useState("")
+  const [users, setUsers] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [assignedTo, setAssignedTo] = useState("");
   const statusDisplay = [
     {
-        title: "Default"
+      title: "Default",
     },
     {
-        title: "Todo"
-    },{
-        title: "In-Progress"
-    },{
-        title: "Done"
-    }
-  ]
+      title: "Todo",
+    },
+    {
+      title: "In-Progress",
+    },
+    {
+      title: "Done",
+    },
+  ];
 
   useEffect(() => {
     const checkRole = async () => {
@@ -30,35 +32,36 @@ const AddTask = () => {
         `http://localhost:8000/api/v1/project/getUsersRole/${id}`,
         { withCredentials: true }
       );
-      data.role === "Team Member" ? navigateTo('/') : null
+      data.role === "Team Member" ? navigateTo("/") : null;
     };
-    const getUsers = async() => {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/project/getAllUsers/${id}`, {withCredentials: true})
-        setUsers(data.users)
-        console.log(data.users);
-    }
+    const getUsers = async () => {
+      const { data } = await axios.get(
+        `http://localhost:8000/api/v1/project/getAllUsers/${id}`,
+        { withCredentials: true }
+      );
+      setUsers(data.users);
+      console.log(data.users);
+    };
     checkRole();
     getUsers();
   }, []);
 
-  const handleAddTask = async(e) => {
-    e.preventDefault()
-    // console.log(title);
-    // console.log(description);
-    // console.log(status);
-    // console.log(deadline);
-    // console.log(assignedTo);
-    // console.log(id);
+  const handleAddTask = async (e) => {
+    e.preventDefault();
     try {
-        const { data } = await axios.post('http://localhost:8000/api/v1/task/addTask', { title, description, status, deadline, assignedTo, projectId: id}, {withCredentials: true})
-        if(data.success === true) {
-            toast.success(data.message)
-            navigateTo(`/projectDetail/${id}`)
-        }
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/task/addTask",
+        { title, description, status, deadline, assignedTo, projectId: id },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        navigateTo(`/projectDetail/${id}`);
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div>
@@ -84,7 +87,7 @@ const AddTask = () => {
                   required
                   className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={title}
-                  onChange={e=>setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
             </div>
@@ -102,7 +105,7 @@ const AddTask = () => {
                   id="description"
                   className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={description}
-                  onChange={e=>setDescription(e.target.value)}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
             </div>
@@ -114,12 +117,19 @@ const AddTask = () => {
                 Status
               </label>
               <div className="mt-1">
-                <select className="w-full" onChange={e=>setStatus(e.target.value)}>
-                    {
-                        statusDisplay.map((status,index)=>(
-                            <option defaultValue={status.title} value={status.title} key={index}>{status.title}</option>
-                        ))
-                    }
+                <select
+                  className="w-full"
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  {statusDisplay.map((status, index) => (
+                    <option
+                      defaultValue={status.title}
+                      value={status.title}
+                      key={index}
+                    >
+                      {status.title}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -137,7 +147,7 @@ const AddTask = () => {
                   required
                   className="block w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   value={deadline}
-                  onChange={e=>setDeadline(e.target.value)}
+                  onChange={(e) => setDeadline(e.target.value)}
                 />
               </div>
             </div>
@@ -149,12 +159,16 @@ const AddTask = () => {
                 Assign To
               </label>
               <div className="mt-1">
-                <select className="w-full" onChange={e=>setAssignedTo(e.target.value)}>
-                    {
-                        users.map((user, index)=>(
-                            <option value={user.id._id} key={index}>{user.id.name}</option>
-                        ))
-                    }
+                <select
+                  className="w-full"
+                  onChange={(e) => setAssignedTo(e.target.value)}
+                >
+                  <option value={'Default'}>Default</option>
+                  {users.map((user, index) => (
+                    <option value={user.id._id} key={index}>
+                      {user.id.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

@@ -19,7 +19,7 @@ const Projects = () => {
     <>
       <div className="pl-8 flex justify-between items-center">
         <div className="text-2xl font-bold ">Projects</div>
-        <div className="p-2 rounded-lg text-white bg-black mr-6">Add Project</div>
+        <div className="p-2 rounded-lg text-white bg-black mr-6"><Link to={'/addProject'}>Add Project</Link></div>
       </div>
       <div className="p-6 flex flex-col justify-center items-center flex-wrap gap-6">
         {projects.map((project, index) => (

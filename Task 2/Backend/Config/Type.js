@@ -19,9 +19,8 @@ export const projectParser = z.object({
     users: z.object({
         id: z.string(),
         role: z.string()
-    }),
+    }).optional(),
     tasks: z.optional(),
-    status: z.string(),
     startDate: z.string()
 })
 
