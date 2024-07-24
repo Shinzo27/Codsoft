@@ -92,10 +92,8 @@ const Header = () => {
                       <IoCart className="hover:text-orange-500" />
                     </Link>
                   </button>
-                  <button>
-                    <button onClick={()=>logoutHandler}>
+                  <button onClick={()=>logoutHandler}>
                       <LuLogOut className="hover:text-orange-500"/>
-                    </button>
                   </button>
                 </div>
               ) : null}
