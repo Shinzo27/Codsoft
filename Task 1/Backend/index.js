@@ -33,7 +33,7 @@ cloudinary.v2.config({
 })
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["https://codsoft-dkdy.onrender.com"],
     methods: ["GET","POST","PUT","DELETE"],
     credentials: true
 }))
