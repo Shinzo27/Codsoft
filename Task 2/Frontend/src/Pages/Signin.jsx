@@ -27,8 +27,6 @@ const Signin = () => {
         setUser(response.data.user);
         console.log(user);
       } catch (error) {
-        setIsAuthenticated(false);
-        setUser({});
         console.log(error);
       }
     };
