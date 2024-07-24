@@ -19,24 +19,6 @@ import UserDetails from './Pages/UserDetails'
 function App() {
   const { isAuthenticated, setIsAuthenticated, user, setUser} = useContext(Context)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/me",
-          {
-            withCredentials: true,
-          }
-        );
-        setIsAuthenticated(true);
-        setUser(response.data.user);
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    fetchUser()
-  }, [isAuthenticated]);
-
   return (
     <BrowserRouter>
       <Header/>

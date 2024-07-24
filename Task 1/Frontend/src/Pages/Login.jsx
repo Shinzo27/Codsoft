@@ -15,6 +15,20 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "https://grocery-backend-wyyo.onrender.com/api/v1/user/customer/me",
+          {
+            withCredentials: true,
+          }
+        );
+        setIsAuthenticated(true);
+        setUser(response.data.user);
+      } catch (error) {
+        console.log(error)
+      }
+    };
     try {
       const response = await axios.post(
         "https://grocery-backend-wyyo.onrender.com/api/v1/user/signin",
@@ -25,7 +39,7 @@ const Login = () => {
         }
       );
       if(response.data){
-        setIsAuthenticated(true)
+        fetchUser()
         navigateTo("/")
         toast.success(response.data.message)
       }
