@@ -5,14 +5,33 @@ import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Signin = () => {
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, user, setUser } = useContext(Context)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "https://pmt-backend.onrender.com/api/v1/user/me",
+          {
+            withCredentials: true,
+          }
+        );
+        setIsAuthenticated(true);
+        console.log(isAuthenticated);
+        setUser(response.data.user);
+        console.log(user);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setUser({});
+        console.log(error);
+      }
+    };
     try {
       const { data } = await axios.post(
         "https://pmt-backend.onrender.com/api/v1/user/signin",
@@ -23,7 +42,7 @@ const Signin = () => {
         }
       );
       if (data.success) {
-        setIsAuthenticated(true)
+        fetchUser()
         navigateTo("/");
         toast.success("User loggedin!");
       }

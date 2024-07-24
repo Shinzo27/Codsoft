@@ -15,27 +15,27 @@ import AddTask from "./Pages/AddTask"
 import AddProject from "./Pages/AddProject"
 
 function App() {
-  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context)
+  // const { is Authenticated, setIsAuthenticated, setUser } = useContext(Context)
 
-  useEffect(()=>{
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://pmt-backend.onrender.com/api/v1/user/me",
-          {
-            withCredentials: true,
-          }
-        );
-        setIsAuthenticated(true);
-        setUser(response.data.user);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUser({});
-        console.log(error);
-      }
-    };
-    fetchUser()
-  }, [isAuthenticated])
+  // useEffect(()=>{
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://pmt-backend.onrender.com/api/v1/user/me",
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
+  //       setIsAuthenticated(true);
+  //       setUser(response.data.user);
+  //     } catch (error) {
+  //       setIsAuthenticated(false);
+  //       setUser({});
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUser()
+  // }, [isAuthenticated])
   
   return (
     <>
