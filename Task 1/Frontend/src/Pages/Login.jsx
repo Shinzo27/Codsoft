@@ -24,9 +24,11 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      setIsAuthenticated(true)
-      navigateTo("/")
-      toast.success(response.data.message)
+      if(response.data){
+        setIsAuthenticated(true)
+        navigateTo("/")
+        toast.success(response.data.message)
+      }
     } catch (error) {
       toast.error(error.response.data.message)
     }
