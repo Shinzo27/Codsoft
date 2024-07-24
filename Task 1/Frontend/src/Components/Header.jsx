@@ -50,6 +50,7 @@ const Header = () => {
           setIsAuthenticated(false);
           setUser({});
           console.log("afterLogout" + user)
+          console.log("afterLogout" + isAuthenticated)
           navigateTo('/')
           toast.success(data.message);
         } else {
