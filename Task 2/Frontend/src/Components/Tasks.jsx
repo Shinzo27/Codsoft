@@ -6,7 +6,7 @@ const Tasks = ({projectId}) => {
 
   useEffect(()=>{
     const getTasks = async() => {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/task/getTasks/${projectId}`, {withCredentials: true})
+      const { data } = await axios.get(`https://pmt-backend.onrender.com/api/v1/task/getTasks/${projectId}`, {withCredentials: true})
       setTasks(data.tasks)
     }
     getTasks()

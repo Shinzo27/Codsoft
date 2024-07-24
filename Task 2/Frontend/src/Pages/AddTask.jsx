@@ -29,14 +29,14 @@ const AddTask = () => {
   useEffect(() => {
     const checkRole = async () => {
       const { data } = await axios.get(
-        `http://localhost:8000/api/v1/project/getUsersRole/${id}`,
+        `https://pmt-backend.onrender.com/api/v1/project/getUsersRole/${id}`,
         { withCredentials: true }
       );
       data.role === "Team Member" ? navigateTo("/") : null;
     };
     const getUsers = async () => {
       const { data } = await axios.get(
-        `http://localhost:8000/api/v1/project/getAllUsers/${id}`,
+        `https://pmt-backend.onrender.com/api/v1/project/getAllUsers/${id}`,
         { withCredentials: true }
       );
       setUsers(data.users);
@@ -50,7 +50,7 @@ const AddTask = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:8000/api/v1/task/addTask",
+        "https://pmt-backend.onrender.com/api/v1/task/addTask",
         { title, description, status, deadline, assignedTo, projectId: id },
         { withCredentials: true }
       );

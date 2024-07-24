@@ -16,11 +16,11 @@ const ProjectAbout = ({ projectId }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       const { data } = await axios.get(
-        `http://localhost:8000/api/v1/project/getProjectDetail/${projectId}`,
+        `https://pmt-backend.onrender.com/api/v1/project/getProjectDetail/${projectId}`,
         { withCredentials: true }
       );
       const response = await axios.get(
-        `http://localhost:8000/api/v1/project/getUsersRole/${projectId}`,
+        `https://pmt-backend.onrender.com/api/v1/project/getUsersRole/${projectId}`,
         { withCredentials: true }
       );
       setRole(response.data.role);

@@ -14,7 +14,7 @@ const AddUser = () => {
     const handleAddUser = async(e) => {
       e.preventDefault()
       try {
-        const { data }  = await axios.post(`http://localhost:8000/api/v1/project/addUser/${id}`, {name, email,role}, {withCredentials: true})
+        const { data }  = await axios.post(`https://pmt-backend.onrender.com/api/v1/project/addUser/${id}`, {name, email,role}, {withCredentials: true})
         if(data.success === true) {
           toast.success(data.message)
           navigateTo(`/projectDetail/${id}`)
@@ -26,7 +26,7 @@ const AddUser = () => {
 
     useEffect(()=>{
         const checkRole = async() => {
-            const { data } = await axios.get(`http://localhost:8000/api/v1/project/getUsersRole/${id}`, {withCredentials: true})
+            const { data } = await axios.get(`https://pmt-backend.onrender.com/api/v1/project/getUsersRole/${id}`, {withCredentials: true})
             if(data.role === "Team Member") return navigateTo('/')
         }
         checkRole()

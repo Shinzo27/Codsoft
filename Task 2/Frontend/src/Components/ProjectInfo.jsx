@@ -6,7 +6,7 @@ const ProjectInfo = () => {
   const slicedTask = tasks.slice(0,3)
   useEffect(()=>{
     const getTasks = async() => {
-      const { data } = await axios.get('http://localhost:8000/api/v1/task/getTasksOfUser', {withCredentials: true})
+      const { data } = await axios.get('https://pmt-backend.onrender.com/api/v1/task/getTasksOfUser', {withCredentials: true})
       setTasks(data.tasks)
     }
     getTasks()

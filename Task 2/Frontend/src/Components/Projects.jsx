@@ -8,7 +8,7 @@ const Projects = () => {
 
   useEffect(()=>{
     const getProjects = async() => {
-      const { data } = await axios.get('http://localhost:8000/api/v1/project/getProjects', {withCredentials: true})
+      const { data } = await axios.get('https://pmt-backend.onrender.com/api/v1/project/getProjects', {withCredentials: true})
       setProjects(data.project)
       console.log(data.project)
     }

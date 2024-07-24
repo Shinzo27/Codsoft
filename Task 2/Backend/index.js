@@ -17,7 +17,7 @@ config({path: './Config/.env'})
 mongoose.connect(process.env.MONGO_URI).then(console.log("MongoDb Connected"))
 
 app.use(cors({
-    origin: process.env.FRONTEND_URI,
+    origin: "https://pmt-frontend.onrender.com",
     methods: ["GET","POST","PUT","DELETE"],
     credentials: true
 }))
@@ -25,7 +25,6 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/project', projectRouter)

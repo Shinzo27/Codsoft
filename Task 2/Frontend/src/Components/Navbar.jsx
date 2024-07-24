@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const handleLogout = async() => {
     try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/user/logout', {withCredentials: true})
+      const { data } = await axios.get('https://pmt-backend.onrender.com/api/v1/user/logout', {withCredentials: true})
       if(data.success) {
         setIsAuthenticated(false)
         setUser({})

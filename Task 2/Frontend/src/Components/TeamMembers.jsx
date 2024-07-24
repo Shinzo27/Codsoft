@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 const TeamMembers = ({projectId}) => {
   useEffect(()=>{
     const fetchMembers = async() => {
-      const { data } = await axios.get(`http://localhost:8000/api/v1/project/getAllUsers/${projectId}`, { withCredentials: true })
+      const { data } = await axios.get(`https://pmt-backend.onrender.com/api/v1/project/getAllUsers/${projectId}`, { withCredentials: true })
       setTeamMembers(data.users)
     }
     fetchMembers()
