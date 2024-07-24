@@ -13,7 +13,9 @@ export function generateToken(user,message,statusCode,res) {
 
      res.cookie(cookieName, token,{
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRES  * 24 * 60 * 60 * 1000),
-        httpOnly: true
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
      }).status(statusCode).json({
         success: true,
         message,
